@@ -1,11 +1,5 @@
 from django.db import models
 
-class Skill(models.Model):
-    kick = models.IntegerField(blank=True)
-    brave = models.IntegerField(blank=True)
-    luck = models.IntegerField(blank=True)
-    health = models.IntegerField(blank=True)
-
 class Person(models.Model):
     # ORM fields
     name = models.CharField(max_length=100)
@@ -21,7 +15,10 @@ class Player(Person):
     )
     # ORM fields
     position = models.IntegerField(choices=POSITIONS)
-    skill = models.ForeignKey(Skill)
+    kick = models.IntegerField(blank=True)
+    brave = models.IntegerField(blank=True)
+    luck = models.IntegerField(blank=True)
+    health = models.IntegerField(blank=True)
 
 class Manager(Person):
     # ORM fields
