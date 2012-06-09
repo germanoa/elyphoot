@@ -1,11 +1,23 @@
-from game.models import Player, Team
+from game.models import Player, Team, Team_Player
 from django.contrib import admin
 
 class PlayerAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Person Info',  {'fields': ['name', 'nick', 'birthday']}),
         ('Player Info and Skill',  {'fields': ['position', 'kick', 'brave', 'luck', 'health']}),
+    ] 
+
+class TeamPlayerInline(admin.TabularInline):
+    model = Team_Player
+    extra = 1
+
+class TeamAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('Basic Info', {'fields': ['name']}),
+        ('Tactical Info', {'fields': ['formation', 'squad']}),
     ]
+    
+    inlines = (TeamPlayerInline,)
 
 admin.site.register(Player, PlayerAdmin)
-admin.site.register(Team)
+admin.site.register(Team, TeamAdmin)

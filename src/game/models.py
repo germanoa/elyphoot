@@ -42,11 +42,30 @@ class Round(models.Model):
     championship = models.ForeignKey(Championship)
 
 class Team(models.Model):
+    FORMATION = (
+        (0, u'3-3-4'),
+        (1, u'3-4-3'),
+        (2, u'3-5-2'),
+        (3, u'3-6-1'),
+        (4, u'2-3-5'),
+        (5, u'4-2-4'),
+        (6, u'4-3-3'),
+        (7, u'4-3-2-1'),
+        (8, u'4-4-2'),
+        (9, u'4-5-1'),
+        (10, u'4-6-0'),
+        (11, u'5-3-2'),
+        (12, u'5-4-1'),
+        (13, u'5-5-0'),
+        (14, u'4-1-3-2'),
+        (15, u'Carrossel'),
+    )
     # ORM fields
     name = models.CharField(max_length=100)
     player = models.ManyToManyField(Player, related_name="player", through="Team_Player")
+    formation = models.IntegerField(choices=FORMATION)
+    squad = models.ManyToManyField(Player, related_name="squad", blank=True) # join table will be created
     manager = models.ManyToManyField(Manager, through="Team_Manager") 
-    squad = models.ManyToManyField(Player, related_name="squad", blank=True ) # join table will be created
     
 class Team_Player(models.Model):
     team = models.ForeignKey(Team)
