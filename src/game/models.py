@@ -14,8 +14,12 @@ class Player(Person):
         (3, u'Forward'),
     )
     # ORM fields
+    country = models.CharField(max_length=5)
+    wage = models.IntegerField(blank=True)
     position = models.IntegerField(choices=POSITIONS)
     kick = models.IntegerField(blank=True)
+    dribble = models.IntegerField(blank=True)
+    strength = models.IntegerField(blank=True)
     brave = models.IntegerField(blank=True)
     luck = models.IntegerField(blank=True)
     health = models.IntegerField(blank=True)
