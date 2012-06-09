@@ -73,6 +73,7 @@ class Team(models.Model):
         (15, u'Carrossel'),
     )
     # ORM fields
+    finance = models.IntegerField(blank=True)
     name = models.CharField(max_length=100)
     player = models.ManyToManyField(Player, related_name="player", through="Team_Player")
     formation = models.IntegerField(choices=FORMATION)
@@ -85,8 +86,7 @@ class Team(models.Model):
 class Team_Player(models.Model):
     team = models.ForeignKey(Team)
     player = models.ForeignKey(Player)
-    #season = models.ForeignKey(Season, blank=True)
-    salary = models.IntegerField(blank=True)    
+    vinculado = models.BooleanField()    
 
 class Team_Manager(models.Model):
     team = models.ForeignKey(Team)

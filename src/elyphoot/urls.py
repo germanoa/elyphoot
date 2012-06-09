@@ -16,4 +16,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     
     url(r'^$', 'game.views.newgame'),
+    
+    # Load initial data to db
+    url(r'^loaddb$', 'game.views.loaddb'),
 )
