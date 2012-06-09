@@ -4,7 +4,8 @@ from django.contrib import admin
 class PlayerAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Person Info',  {'fields': ['name', 'nick', 'birthday']}),
-        ('Player Info and Skill',  {'fields': ['position', 'kick', 'brave', 'luck', 'health']}),
+        ('Additional Info', {'fields': ['country', 'wage']}),
+        ('Player Info and Skill',  {'fields': ['position', 'kick', 'dribble', 'strength', 'brave', 'luck', 'health']}),
     ] 
 
 class TeamPlayerInline(admin.TabularInline):
