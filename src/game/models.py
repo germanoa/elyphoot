@@ -5,6 +5,9 @@ class Person(models.Model):
     name = models.CharField(max_length=100)
     nick = models.CharField(max_length=20)
     birthday = models.DateField()
+    
+    def __unicode__(self):
+        return self.name + ' [' + self.nick + ']'
 
 class Player(Person):
     POSITIONS = (
@@ -23,11 +26,17 @@ class Player(Person):
     brave = models.IntegerField(blank=True)
     luck = models.IntegerField(blank=True)
     health = models.IntegerField(blank=True)
+    
+    def __unicode__(self):
+        return self.name + ' [' + self.nick + ']'
 
 class Manager(Person):
     # ORM fields
     points = models.IntegerField()
     empregado = models.BooleanField() # pra evitar selects grandes,
+    
+    def __unicode__(self):
+        return base.__unicode__()
 
 class Season(models.Model):
     year = models.IntegerField()
@@ -36,6 +45,9 @@ class Championship(models.Model):
     # ORM fields
     name = models.CharField(max_length=100)
     season = models.ForeignKey(Season)
+    
+    def __unicode__(self):
+        return self.name
 
 class Round(models.Model):
     # ORM fields
@@ -65,7 +77,10 @@ class Team(models.Model):
     player = models.ManyToManyField(Player, related_name="player", through="Team_Player")
     formation = models.IntegerField(choices=FORMATION)
     squad = models.ManyToManyField(Player, related_name="squad", blank=True) # join table will be created
-    manager = models.ManyToManyField(Manager, through="Team_Manager") 
+    manager = models.ManyToManyField(Manager, through="Team_Manager")
+    
+    def __unicode__(self):
+        return self.name
     
 class Team_Player(models.Model):
     team = models.ForeignKey(Team)
@@ -85,4 +100,4 @@ class Match(models.Model):
     team2 = models.ForeignKey(Team, related_name="team2")
     team1_goals = models.IntegerField()
     team2_goals = models.IntegerField()
-    roundmatch = models.ForeignKey(Round)    
+    roundmatch = models.ForeignKey(Round)
