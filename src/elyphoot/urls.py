@@ -19,4 +19,7 @@ urlpatterns = patterns('',
     
     # Load initial data to db
     url(r'^loaddb$', 'game.views.loaddb'),
+
+    # Round
+    url(r'^round$', 'game.views.runround'),
 )

@@ -14,6 +14,29 @@ from datetime import date
 from models import Player,Team,Manager
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
+def runround(request):
+    #1. quando um campeonato eh criado, ele deve gerar todos rounds deste campeonato
+    #2. quando um round eh criado, ele deve gerar todos matches deste round
+    #3. para cada match do round, rodar procedimento que segue com map iterator?
+    #4. quando um match eh criado, ele possui 2 teams, aqui recebidos em t1 e t2
+    t1=Team.objects.filter(name="INTERNACIONAL")
+    t2=Team.objects.filter(name="GREMIO")
+
+    #por enquanto usando player; apos usar squad
+    t1_squad=Team_Player.objects.filter(team=t1)
+    t2_squad=Team_Player.objects.filter(team=t2)
+
+    #aqui irei colocar algoritmo que simula o jogo
+    t1gol=0
+    t2gol=0
+    for i in range(0,len(t1_squad)):
+        if t1_squad[i].player.kick > t2_squad[i].player.kick: t1gol=t1gol+1
+        if t1_squad[i].player.kick < t2_squad[i].player.kick: t2gol=t2gol+1
+    if t1gol > t2gol: q = "t1!"
+    if t1gol < t2gol: q = "t2!"
+    
+ 
+    return render_to_response('round.html',  locals() , context_instance = RequestContext(request))
 
 
 def loaddb(request):
