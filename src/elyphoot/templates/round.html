@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}{{ block.super }} - Round{% endblock %}
+
+{% block contents %}
+<table>
+<tr>
+    <td bgcolor={{t1color1}}><font color={{t1color2}}>Inter</font></td>
+    <td> {{ t1gol }} x {{ t2gol }}</td>
+    <td bgcolor={{t2color1}}><font color={{t2color2}}>Gremio</font></td>
+</tr>
+</table>
+
+{% if debug %} {{ relatorio }} {%endif %}
+{% endblock contents %}
