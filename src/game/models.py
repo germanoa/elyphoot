@@ -79,6 +79,8 @@ class Team(models.Model):
     formation = models.IntegerField(choices=FORMATION)
     squad = models.ManyToManyField(Player, related_name="squad", blank=True) # join table will be created
     manager = models.ManyToManyField(Manager, through="Team_Manager")
+    color1 = models.CharField(max_length=20)
+    color2 = models.CharField(max_length=20)
     
     def __unicode__(self):
         return self.name

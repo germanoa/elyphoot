@@ -14,7 +14,7 @@ class TeamPlayerInline(admin.TabularInline):
 
 class TeamAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Basic Info', {'fields': ['name']}),
+        ('Basic Info', {'fields': ['name', 'color1', 'color2']}),
         ('Tactical Info', {'fields': ['formation', 'squad']}),
     ]
     

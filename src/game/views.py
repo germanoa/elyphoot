@@ -14,28 +14,106 @@ from datetime import date
 from models import Player,Team,Manager
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
+
+def team_power(t,position):
+    power=k=d=s=b=l=h=0
+    if position == "md":
+        for i in range(0,len(t)):
+            k = t[i].player.kick * randint(0,1)
+            d = t[i].player.dribble * randint(0,3)
+            s = t[i].player.strength * randint(0,2)
+            b = t[i].player.brave * randint(0,2)
+            l = t[i].player.luck * randint(0,1)
+            h = t[i].player.health * randint(0,2)
+    if position == "df":
+        for i in range(0,t.count()):
+            k = t[i].player.kick * randint(0,1)
+            d = t[i].player.dribble * randint(0,1)
+            s = t[i].player.strength * randint(0,3)
+            b = t[i].player.brave * randint(0,2)
+            l = t[i].player.luck * randint(0,2)
+            h = t[i].player.health * randint(0,2)
+    if position == "fw":
+        for i in range(0,t.count()):
+            k = t[i].player.kick * randint(0,3)
+            d = t[i].player.dribble * randint(0,2)
+            s = t[i].player.strength * randint(0,1)
+            b = t[i].player.brave * randint(0,1)
+            l = t[i].player.luck * randint(0,2)
+            h = t[i].player.health * randint(0,2)
+    power = power + k + d + s + b + l + h 
+    return power
+
 def runround(request):
+
+    #queries utilizadas para listar players por posicao. Melhorar isso.
+    p_gk=Player.objects.filter(position=0)
+    p_df=Player.objects.filter(position=1)
+    p_md=Player.objects.filter(position=2)
+    p_fw=Player.objects.filter(position=3)
+
     #1. quando um campeonato eh criado, ele deve gerar todos rounds deste campeonato
     #2. quando um round eh criado, ele deve gerar todos matches deste round
     #3. para cada match do round, rodar procedimento que segue com map iterator?
     #4. quando um match eh criado, ele possui 2 teams, aqui recebidos em t1 e t2
+
+
+    #por enquanto usando team_player; apos usar squad
+    #isto tah mto lento. como melhorar?
     t1=Team.objects.filter(name="INTERNACIONAL")
+    t1color1=t1[0].color1
+    t1color2=t1[0].color2
+    t1_gk=Team_Player.objects.filter(team=t1, player__in=p_gk)
+    t1_df=Team_Player.objects.filter(team=t1, player__in=p_df)
+    t1_md=Team_Player.objects.filter(team=t1, player__in=p_md)
+    t1_fw=Team_Player.objects.filter(team=t1, player__in=p_fw)
+
     t2=Team.objects.filter(name="GREMIO")
+    t2color1=t2[0].color1
+    t2color2=t2[0].color2
+    t2_gk=Team_Player.objects.filter(team=t2, player__in=p_gk)
+    t2_df=Team_Player.objects.filter(team=t2, player__in=p_df)
+    t2_md=Team_Player.objects.filter(team=t2, player__in=p_md)
+    t2_fw=Team_Player.objects.filter(team=t2, player__in=p_fw)
 
-    #por enquanto usando player; apos usar squad
-    t1_squad=Team_Player.objects.filter(team=t1)
-    t2_squad=Team_Player.objects.filter(team=t2)
-
-    #aqui irei colocar algoritmo que simula o jogo
     t1gol=0
     t2gol=0
-    for i in range(0,len(t1_squad)):
-        if t1_squad[i].player.kick > t2_squad[i].player.kick: t1gol=t1gol+1
-        if t1_squad[i].player.kick < t2_squad[i].player.kick: t2gol=t2gol+1
-    if t1gol > t2gol: q = "t1!"
-    if t1gol < t2gol: q = "t2!"
-    
- 
+    cronometer = 0 #cada iteracao deste while deve ser printado cronometer,t1gol e t2gol. ajax? 
+    ballpos="MD"
+    relatorio= []
+    debug=False
+    while (cronometer < 90):
+        if ballpos == "MD":
+            committal = randint(0,100)
+            if committal > 70: 
+                MD1_power = team_power(t1_md,"md")
+                if debug: relatorio.append("MD1_POWER: "+str(MD1_power))
+                MD2_power = team_power(t2_md,"md")
+                if debug: relatorio.append("MD2_POWER: "+str(MD2_power))
+                if MD1_power > MD2_power:
+                    ballpos="FW1"
+                if MD2_power > MD1_power:
+                    ballpos="FW2"
+        if ballpos == "FW1":
+            committal = randint(0,100)
+            if committal > 90: 
+                FW1_power = team_power(t1_fw,"fw")
+                if debug: relatorio.append("FW1_POWER: "+str(FW1_power))
+                DF2_power = team_power(t2_df,"df")    
+                if debug: relatorio.append("DF2_POWER: "+str(DF2_power))
+                if FW1_power > DF2_power:
+                    t1gol=t1gol+1
+            ballpos="MD"
+        if ballpos == "FW2":
+            if committal > 90: 
+                FW2_power = team_power(t2_fw,"fw")
+                if debug: relatorio.append("FW2_POWER: "+str(FW2_power))
+                DF1_power = team_power(t1_df,"df")    
+                if debug: relatorio.append("DF1_POWER: "+str(DF1_power))
+                if FW2_power > DF1_power:
+                    t2gol=t2gol+1
+            ballpos="MD"
+        cronometer=cronometer+1
     return render_to_response('round.html',  locals() , context_instance = RequestContext(request))
 
 
