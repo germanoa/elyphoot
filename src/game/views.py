@@ -12,6 +12,7 @@ from random import randint
 from string import Template
 from datetime import date
 from models import Player,Team,Manager
+
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -71,14 +72,27 @@ def runround(request):
     #3. para cada match do round, rodar procedimento que segue com map iterator?
     #4. quando um match eh criado, ele possui 2 teams, aqui recebidos em t1 e t2
 
-    result = []
-    result.append(runmatch(p_gk,p_df,p_md,p_fw,"INTERNACIONAL","GREMIO"))
-    result.append(runmatch(p_gk,p_df,p_md,p_fw,"SAO PAULO","SANTOS"))
-    result.append(runmatch(p_gk,p_df,p_md,p_fw,"PALMEIRAS","CORINTHIANS"))
-    result.append(runmatch(p_gk,p_df,p_md,p_fw,"FLAMENGO","VASCO"))
+    #matches
+    m1 = (p_gk,p_df,p_md,p_fw,"INTERNACIONAL","GREMIO")
+    m2 = (p_gk,p_df,p_md,p_fw,"SAO PAULO","SANTOS")
+    m3 = (p_gk,p_df,p_md,p_fw,"PALMEIRAS","CORINTHIANS")
+    m4 = (p_gk,p_df,p_md,p_fw,"FLAMENGO","VASCO")
+    matches=[]
+    matches.append(m1)
+    matches.append(m2)
+    matches.append(m3)
+    matches.append(m4)
+    #exemplo de round
+    result = map(runmatch,matches)
     return render_to_response('round.html',  locals() , context_instance = RequestContext(request))
 
-def runmatch(p_gk,p_df,p_md,p_fw,t1n,t2n):
+def runmatch(param):
+    p_gk=param[0]
+    p_df=param[1]
+    p_md=param[2]
+    p_fw=param[3]
+    t1n=param[4]
+    t2n=param[5]
     #por enquanto usando team_player; apos usar squad
     #isto tah mto lento. como melhorar?
     t1=Team.objects.filter(name=t1n)
