@@ -3,11 +3,11 @@
 {% block title %}{{ block.super }} - Round{% endblock %}
 
 {% block contents %}
-<table>
+<table border=1 style="border-style:none">
 <tr>
-    <td bgcolor={{t1color1}}><font color={{t1color2}}>Inter</font></td>
-    <td> {{ t1gol }} x {{ t2gol }}</td>
-    <td bgcolor={{t2color1}}><font color={{t2color2}}>Gremio</font></td>
+    <td  style="width:150px;border-color:{{t1color3}}" bgcolor={{t1color1}} align="right"><font color={{t1color2}}><b>{{t1name}}</b></font></td>
+    <td style="border-style:none"> {{ t1gol }} x {{ t2gol }}</td>
+    <td  style="width:150px;border-color:{{t2color3}}" bgcolor={{t2color1}}><font color={{t2color2}}><b>{{t2name}}</b></font></td>
 </tr>
 </table>
 

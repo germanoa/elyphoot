@@ -81,6 +81,7 @@ class Team(models.Model):
     manager = models.ManyToManyField(Manager, through="Team_Manager")
     color1 = models.CharField(max_length=20)
     color2 = models.CharField(max_length=20)
+    color3 = models.CharField(max_length=20)
     
     def __unicode__(self):
         return self.name

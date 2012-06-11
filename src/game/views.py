@@ -60,17 +60,21 @@ def runround(request):
 
     #por enquanto usando team_player; apos usar squad
     #isto tah mto lento. como melhorar?
-    t1=Team.objects.filter(name="INTERNACIONAL")
+    t1=Team.objects.filter(name="SPORT")
+    t1name=t1[0].name
     t1color1=t1[0].color1
     t1color2=t1[0].color2
+    t1color3=t1[0].color3
     t1_gk=Team_Player.objects.filter(team=t1, player__in=p_gk)
     t1_df=Team_Player.objects.filter(team=t1, player__in=p_df)
     t1_md=Team_Player.objects.filter(team=t1, player__in=p_md)
     t1_fw=Team_Player.objects.filter(team=t1, player__in=p_fw)
 
     t2=Team.objects.filter(name="GREMIO")
+    t2name=t2[0].name
     t2color1=t2[0].color1
     t2color2=t2[0].color2
+    t2color3=t2[0].color3
     t2_gk=Team_Player.objects.filter(team=t2, player__in=p_gk)
     t2_df=Team_Player.objects.filter(team=t2, player__in=p_df)
     t2_md=Team_Player.objects.filter(team=t2, player__in=p_md)
@@ -135,9 +139,12 @@ def loaddb(request):
             nivelteam = int(f[3].strip())
             nameteam = sw["nameteam"] = f[0].strip()
             countryteam = sw["countryteam"] = f[2].strip()
+            color1 = sw["color1"] = f[4].strip()
+            color2 = sw["color2"] = f[5].strip()
+            color3 = sw["color3"] = f[6].strip()
             basemoney = sw["basemoney"] = 1000000
             formation = 8
-            t = Team(name=nameteam,finance=basemoney,formation=formation)
+            t = Team(name=nameteam,finance=basemoney,formation=formation,color1=color1,color2=color2,color3=color3)
             t.save()
         else:
             if nivelteam == 1:
