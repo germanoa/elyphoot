@@ -4,11 +4,15 @@
 
 {% block contents %}
 <table border=1 style="border-style:none">
+
+<!-- serie 1 match 1 -->
+{% for r in result %}
 <tr>
-    <td  style="width:150px;border-color:{{t1color3}}" bgcolor={{t1color1}} align="right"><font color={{t1color2}}><b>{{t1name}}</b></font></td>
-    <td style="border-style:none"> {{ t1gol }} x {{ t2gol }}</td>
-    <td  style="width:150px;border-color:{{t2color3}}" bgcolor={{t2color1}}><font color={{t2color2}}><b>{{t2name}}</b></font></td>
+    <td  style="width:150px;border-color:{{r.t1color3}}" bgcolor={{r.t1color1}} align="right"><font color={{r.t1color2}}><b>{{r.t1name}}</b></font></td>
+    <td style="border-style:none"> {{ r.t1goals }} x {{ r.t2goals }}</td>
+    <td  style="width:150px;border-color:{{r.t2color3}}" bgcolor={{r.t2color1}}><font color={{r.t2color2}}><b>{{r.t2name}}</b></font></td>
 </tr>
+{% endfor %}
 </table>
 
 {% if debug %} {{ relatorio }} {%endif %}

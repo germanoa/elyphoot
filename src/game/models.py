@@ -82,7 +82,7 @@ class Team(models.Model):
     color1 = models.CharField(max_length=20)
     color2 = models.CharField(max_length=20)
     color3 = models.CharField(max_length=20)
-    
+    seriebase = models.IntegerField(blank=True) 
     def __unicode__(self):
         return self.name
     

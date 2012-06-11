@@ -44,6 +44,20 @@ def team_power(t,position):
     power = power + k + d + s + b + l + h 
     return power
 
+class Result:
+    def __init__(self,t1name="",t1goals=0,t1color1="",t1color2="",t1color3="",t2name="",t2goals=0,t2color1="",t2color2="",t2color3=""):
+        self.t1name = t1name
+        self.t1goals = t1goals
+        self.t1color1 = t1color1
+        self.t1color2 = t1color2
+        self.t1color3 = t1color3
+        self.t2name = t2name
+        self.t2goals = t2goals
+        self.t2color1 = t2color1
+        self.t2color2 = t2color2
+        self.t2color3 = t2color3
+
+
 def runround(request):
 
     #queries utilizadas para listar players por posicao. Melhorar isso.
@@ -57,10 +71,17 @@ def runround(request):
     #3. para cada match do round, rodar procedimento que segue com map iterator?
     #4. quando um match eh criado, ele possui 2 teams, aqui recebidos em t1 e t2
 
+    result = []
+    result.append(runmatch(p_gk,p_df,p_md,p_fw,"INTERNACIONAL","GREMIO"))
+    result.append(runmatch(p_gk,p_df,p_md,p_fw,"SAO PAULO","SANTOS"))
+    result.append(runmatch(p_gk,p_df,p_md,p_fw,"PALMEIRAS","CORINTHIANS"))
+    result.append(runmatch(p_gk,p_df,p_md,p_fw,"FLAMENGO","VASCO"))
+    return render_to_response('round.html',  locals() , context_instance = RequestContext(request))
 
+def runmatch(p_gk,p_df,p_md,p_fw,t1n,t2n):
     #por enquanto usando team_player; apos usar squad
     #isto tah mto lento. como melhorar?
-    t1=Team.objects.filter(name="SPORT")
+    t1=Team.objects.filter(name=t1n)
     t1name=t1[0].name
     t1color1=t1[0].color1
     t1color2=t1[0].color2
@@ -70,7 +91,7 @@ def runround(request):
     t1_md=Team_Player.objects.filter(team=t1, player__in=p_md)
     t1_fw=Team_Player.objects.filter(team=t1, player__in=p_fw)
 
-    t2=Team.objects.filter(name="GREMIO")
+    t2=Team.objects.filter(name=t2n)
     t2name=t2[0].name
     t2color1=t2[0].color1
     t2color2=t2[0].color2
@@ -118,7 +139,8 @@ def runround(request):
                     t2gol=t2gol+1
             ballpos="MD"
         cronometer=cronometer+1
-    return render_to_response('round.html',  locals() , context_instance = RequestContext(request))
+    r = Result(t1name=t1name,t1goals=t1gol,t1color1=t1color1,t1color2=t1color2,t1color3=t1color3,t2name=t2name,t2goals=t2gol,t2color1=t2color1,t2color2=t2color2,t2color3=t2color3)
+    return r 
 
 
 def loaddb(request):
@@ -129,7 +151,7 @@ def loaddb(request):
     jogador_dados = Template("""$name;$nick;$d;$m;$y;$country;$wage;$position;$kick;$brave;$luck;$health;$baseteam""")
 
     baseteam = ""
-    nivelteam = 3
+    nivelteam = 4
     skill = 10
     sw = {}
     for line in lines:
@@ -144,7 +166,7 @@ def loaddb(request):
             color3 = sw["color3"] = f[6].strip()
             basemoney = sw["basemoney"] = 1000000
             formation = 8
-            t = Team(name=nameteam,finance=basemoney,formation=formation,color1=color1,color2=color2,color3=color3)
+            t = Team(name=nameteam,finance=basemoney,formation=formation,color1=color1,color2=color2,color3=color3,seriebase=nivelteam)
             t.save()
         else:
             if nivelteam == 1:
@@ -153,6 +175,8 @@ def loaddb(request):
                 skill = randint(25,35)
             if nivelteam == 3:
                 skill = randint(15,25)
+            if nivelteam == 4:
+                skill = randint(5,15)
             name = sw["name"] = f[0].strip()
             nick = sw["nick"] = f[0].strip()
             d = sw["d"] = randint(1,28)
