@@ -38,22 +38,6 @@ TEAM_SERIE = (
 # blank is only used for validations on django's admin tool
 # null is intended to be used for nullable fields on the database
 
-class Player(models.Model):
-    name = models.CharField(max_length=100)
-    nickname = models.CharField(max_length=100)
-    country = models.CharField(max_length=20)
-    wage = models.IntegerField(blank=True)
-    position = models.IntegerField(choices=PLAYER_POSITION)
-    kick = models.IntegerField(blank=True)
-    dribble = models.IntegerField(blank=True)
-    strength = models.IntegerField(blank=True)
-    brave = models.IntegerField(blank=True)
-    luck = models.IntegerField(blank=True)
-    health = models.IntegerField(blank=True)
-    
-    def __unicode__(self):
-        return self.name + ' [' + self.nickname + ']'
-    
 class Team(models.Model):
     name = models.CharField(max_length=100)
     money = models.IntegerField(blank=True, default=0)
@@ -61,14 +45,17 @@ class Team(models.Model):
     color2 = models.IntegerField(default=255)
     color3 = models.IntegerField(default=255)
     serie = models.IntegerField(choices=TEAM_SERIE)
-    player = models.ManyToManyField(Player, related_name='players')
-    squad = models.ManyToManyField(Player, related_name='squad_members')
     
     def __unicode__(self):
         return self.name
-    
-class PlayerInstance(models.Model):
-    base_player = models.ForeignKey(Player)
+
+class Player(models.Model):
+    team = models.ForeignKey(Team, null=True, blank=True, related_name='team')
+    squad_member = models.BooleanField()
+    name = models.CharField(max_length=100)
+    nickname = models.CharField(max_length=100)
+    country = models.CharField(max_length=100, null=True, blank=True)
+    wage = models.IntegerField(blank=True)
     kick = models.IntegerField(blank=True)
     dribble = models.IntegerField(blank=True)
     strength = models.IntegerField(blank=True)
@@ -77,12 +64,10 @@ class PlayerInstance(models.Model):
     health = models.IntegerField(blank=True)
     
     def __unicode__(self):
-        return self.base_player.name
-    
+        return self.name + ' [' + self.nickname + ']' 
+
 class TeamInstance(models.Model):
-    base_team = models.ForeignKey(Team)
-    player = models.ManyToManyField(PlayerInstance, related_name='players')
-    squad = models.ManyToManyField(PlayerInstance, related_name='squad_members')
+    base_team = models.ForeignKey(Team, related_name='base_team')
     wins = models.IntegerField(default=0)
     draws = models.IntegerField(default=0)
     loses = models.IntegerField(default=0)
@@ -92,10 +77,44 @@ class TeamInstance(models.Model):
     
     def __unicode__(self):
         return self.base_team.name
+        
+class PlayerInstance(models.Model):
+    team = models.ForeignKey(TeamInstance, null=True, blank=True, related_name='team')
+    base_player = models.ForeignKey(Player, related_name='base_player')
+    squad_member = models.BooleanField()
+    wage = models.IntegerField(blank=True)
+    kick = models.IntegerField(blank=True)
+    dribble = models.IntegerField(blank=True)
+    strength = models.IntegerField(blank=True)
+    brave = models.IntegerField(blank=True)
+    luck = models.IntegerField(blank=True)
+    health = models.IntegerField(blank=True)
     
+    def __unicode__(self):
+        return self.base_player.name
+      
+class Round(models.Model):
+    resolved = models.BooleanField(default=False) # was the round completed?
+    
+    def __unicode__(self):
+        return 'DONE? ' + str(self.resolved)
+        
+class Season(models.Model):
+    current_round = models.ForeignKey(Round, null=True, blank=True, related_name='current_round')
+    rounds = models.ManyToManyField(Round, null=True, blank=True, related_name='rounds')
+    winner = models.ForeignKey(TeamInstance, blank=True, null=True, related_name='winner')
+    my_team = models.ForeignKey(TeamInstance, blank=True, null=True, related_name='my_team')
+    teams = models.ManyToManyField(TeamInstance, blank=True, null=True, related_name='teams')
+    year = models.IntegerField()
+    completed = models.BooleanField(default=False)
+    
+    def __unicode__(self):
+        return str(self.year) + ' | COMPLETED? ' + str(self.complete)
+  
 class Match(models.Model):
     team_a = models.ForeignKey(TeamInstance, null=True, blank=True, related_name='team_a')
     team_b = models.ForeignKey(TeamInstance, null=True, blank=True, related_name='team_b')
+    round = models.ForeignKey(Round, null=False, blank=False)
     goals_a = models.IntegerField(default=0)
     goals_b = models.IntegerField(default=0)
     resolved = models.BooleanField(default=False) # was the match played already?
@@ -106,29 +125,11 @@ class Match(models.Model):
         else:
             return self.team_a.base_team.name + ' ? X ? ' + self.team_b.base_team.name
 
-class Round(models.Model):
-    match = models.ManyToManyField(Match, null=True, blank=True, related_name='matches')
-    resolved = models.BooleanField(default=False) # was the round completed?
-    
-    def __unicode__(self):
-        return 'DONE? ' + str(self.resolved)
-
-class Season(models.Model):
-    current_round = models.ForeignKey(Round, null=True, blank=True)
-    winner = models.ForeignKey(TeamInstance, blank=True, null=True, related_name='winner_team')
-    my_team = models.ForeignKey(TeamInstance, blank=True, null=True, related_name='manager_team')
-    team = models.ManyToManyField(TeamInstance, blank=True, null=True, related_name='season_teams')
-    year = models.IntegerField()
-    completed = models.BooleanField(default=False)
-    
-    def __unicode__(self):
-        return str(self.year) + ' | COMPLETED? ' + str(self.complete)
-
 class Manager(models.Model):
     current_season = models.ForeignKey(Season, null=True, blank=True) # if current_season is null we have to create one before the user is able to play
+    season = models.ManyToManyField(Season, null=True, blank=True, related_name='seasons')
     nickname = models.CharField(max_length=20, default='Manager')
     total_points = models.IntegerField(default=0)
-    season = models.ManyToManyField(Season, null=True, blank=True, related_name='seasons')
     
     def __unicode__(self):
         return self.nickname
