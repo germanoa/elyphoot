@@ -42,9 +42,9 @@ class Team(models.Model):
     name = models.CharField(max_length=100)
     money = models.IntegerField(blank=True, default=0)
     team_formation = models.IntegerField(choices=TEAM_FORMATION)
-    color1 = models.IntegerField(default=255)
-    color2 = models.IntegerField(default=255)
-    color3 = models.IntegerField(default=255)
+    color1 = models.CharField(max_length=20, default='white')
+    color2 = models.CharField(max_length=20, default='white')
+    color3 = models.CharField(max_length=20, default='white')
     serie = models.IntegerField(choices=TEAM_SERIE)
     
     def __unicode__(self):
@@ -57,6 +57,7 @@ class Player(models.Model):
     name = models.CharField(max_length=100)
     nickname = models.CharField(max_length=100)
     country = models.CharField(max_length=100, null=True, blank=True)
+    birthday = models.DateField()
     wage = models.IntegerField(blank=True)
     kick = models.IntegerField(blank=True)
     dribble = models.IntegerField(blank=True)
@@ -77,6 +78,7 @@ class TeamInstance(models.Model):
     goals_for = models.IntegerField(default=0)
     goals_against = models.IntegerField(default=0)
     points = models.IntegerField(default=0)
+    money = models.IntegerField(blank=True, default=0)
     
     def __unicode__(self):
         return self.base_team.name
