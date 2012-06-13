@@ -51,7 +51,7 @@ class Team(models.Model):
         return self.name
 
 class Player(models.Model):
-    team = models.ForeignKey(Team, null=True, blank=True, related_name='team')
+    team = models.ForeignKey(Team, null=True, blank=True, related_name='players')
     squad_member = models.BooleanField()
     position = models.IntegerField(choices=PLAYER_POSITION)
     name = models.CharField(max_length=100)
@@ -69,7 +69,7 @@ class Player(models.Model):
         return self.name + ' [' + self.nickname + ']' 
 
 class TeamInstance(models.Model):
-    base_team = models.ForeignKey(Team, related_name='base_team')
+    base_team = models.ForeignKey(Team, related_name='team_instances')
     team_formation = models.IntegerField(choices=TEAM_FORMATION)
     wins = models.IntegerField(default=0)
     draws = models.IntegerField(default=0)
@@ -82,8 +82,8 @@ class TeamInstance(models.Model):
         return self.base_team.name
         
 class PlayerInstance(models.Model):
-    team = models.ForeignKey(TeamInstance, null=True, blank=True, related_name='team')
-    base_player = models.ForeignKey(Player, related_name='base_player')
+    team = models.ForeignKey(TeamInstance, null=True, blank=True, related_name='players')
+    base_player = models.ForeignKey(Player, related_name='player_instances')
     squad_member = models.BooleanField()
     wage = models.IntegerField(blank=True)
     kick = models.IntegerField(blank=True)
@@ -103,20 +103,20 @@ class Round(models.Model):
         return 'DONE? ' + str(self.resolved)
         
 class Season(models.Model):
-    current_round = models.ForeignKey(Round, null=True, blank=True, related_name='current_round')
-    rounds = models.ManyToManyField(Round, null=True, blank=True, related_name='rounds')
-    winner = models.ForeignKey(TeamInstance, blank=True, null=True, related_name='winner')
-    my_team = models.ForeignKey(TeamInstance, blank=True, null=True, related_name='my_team')
-    teams = models.ManyToManyField(TeamInstance, blank=True, null=True, related_name='teams')
+    current_round = models.ForeignKey(Round, null=True, blank=True, related_name='current_season')
+    rounds = models.ManyToManyField(Round, null=True, blank=True, related_name='season')
+    winner = models.ForeignKey(TeamInstance, blank=True, null=True, related_name='season_winner')
+    my_team = models.ForeignKey(TeamInstance, blank=True, null=True, related_name='season_managed_team')
+    teams = models.ManyToManyField(TeamInstance, blank=True, null=True, related_name='season_team')
     year = models.IntegerField()
     completed = models.BooleanField(default=False)
     
     def __unicode__(self):
-        return str(self.year) + ' | COMPLETED? ' + str(self.complete)
+        return str(self.year) + ' | COMPLETED? ' + str(self.completed)
   
 class Match(models.Model):
-    team_a = models.ForeignKey(TeamInstance, null=True, blank=True, related_name='team_a')
-    team_b = models.ForeignKey(TeamInstance, null=True, blank=True, related_name='team_b')
+    team_a = models.ForeignKey(TeamInstance, null=True, blank=True, related_name='match_team_a')
+    team_b = models.ForeignKey(TeamInstance, null=True, blank=True, related_name='match_team_b')
     round = models.ForeignKey(Round, null=False, blank=False)
     goals_a = models.IntegerField(default=0)
     goals_b = models.IntegerField(default=0)
@@ -129,10 +129,11 @@ class Match(models.Model):
             return self.team_a.base_team.name + ' ? X ? ' + self.team_b.base_team.name
 
 class Manager(models.Model):
-    current_season = models.ForeignKey(Season, null=True, blank=True) # if current_season is null we have to create one before the user is able to play
-    season = models.ManyToManyField(Season, null=True, blank=True, related_name='seasons')
+    current_season = models.ForeignKey(Season, null=True, blank=True, related_name='current_managed_by') # if current_season is null we have to create one before the user is able to play
+    season = models.ManyToManyField(Season, null=True, blank=True, related_name='manager')
     nickname = models.CharField(max_length=20, default='Manager')
     total_points = models.IntegerField(default=0)
+    uid = models.IntegerField(null=False, blank=False) # related to django user pk
     
     def __unicode__(self):
         return self.nickname
