@@ -41,6 +41,7 @@ TEAM_SERIE = (
 class Team(models.Model):
     name = models.CharField(max_length=100)
     money = models.IntegerField(blank=True, default=0)
+    team_formation = models.IntegerField(choices=TEAM_FORMATION)
     color1 = models.IntegerField(default=255)
     color2 = models.IntegerField(default=255)
     color3 = models.IntegerField(default=255)
@@ -52,6 +53,7 @@ class Team(models.Model):
 class Player(models.Model):
     team = models.ForeignKey(Team, null=True, blank=True, related_name='team')
     squad_member = models.BooleanField()
+    position = models.IntegerField(choices=PLAYER_POSITION)
     name = models.CharField(max_length=100)
     nickname = models.CharField(max_length=100)
     country = models.CharField(max_length=100, null=True, blank=True)
@@ -68,6 +70,7 @@ class Player(models.Model):
 
 class TeamInstance(models.Model):
     base_team = models.ForeignKey(Team, related_name='base_team')
+    team_formation = models.IntegerField(choices=TEAM_FORMATION)
     wins = models.IntegerField(default=0)
     draws = models.IntegerField(default=0)
     loses = models.IntegerField(default=0)
