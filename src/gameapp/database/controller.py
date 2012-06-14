@@ -61,5 +61,5 @@ def populate_db():
                         'brave': randint(0,50),\
                         'luck': randint(0,50),\
                         'health': randint(0,50),\
-                        'squad_member': True,\
+                        'squad_member': bool(int(f[4].strip())),\
                         'team': t})
