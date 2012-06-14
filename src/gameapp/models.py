@@ -98,6 +98,7 @@ class TeamInstance(models.Model):
         self.money = team.money
         self.serie = team.serie
         self.reset()
+        self.save()
         
         for p in team.players.all():
             new_p = PlayerInstance()
@@ -118,6 +119,8 @@ class TeamInstance(models.Model):
                 self.serie = team_instance.serie + 1
         
         self.reset()
+
+        self.save()
         
         for p in team_instance.players.all():
             new_p = PlayerInstance()
