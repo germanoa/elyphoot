@@ -51,6 +51,7 @@ class Team(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class Player(models.Model):
     team = models.ForeignKey(Team, null=True, blank=True, related_name='players')
     squad_member = models.BooleanField()
@@ -71,6 +72,7 @@ class Player(models.Model):
     def __unicode__(self):
         return self.name + ' [' + self.nickname + ']' 
 
+
 class TeamInstance(models.Model):
     base_team = models.ForeignKey(Team, related_name='team_instances')
     team_formation = models.IntegerField(choices=TEAM_FORMATION)
@@ -81,9 +83,50 @@ class TeamInstance(models.Model):
     goals_against = models.IntegerField(default=0)
     points = models.IntegerField(default=0)
     money = models.IntegerField(blank=True, default=0)
+    serie = models.IntegerField(choices=TEAM_SERIE)
+    
+    def reset(self):
+        self.wins = 0
+        self.loses = 0
+        self.goals_for = 0
+        self.goals_against = 0
+        self.points = 0
+    
+    def copy_from_team(self, team):
+        self.base_team = team
+        self.team_formation = team.team_formation
+        self.money = team.money
+        self.serie = team.serie
+        self.reset()
+        
+        for p in team.players.all():
+            new_p = PlayerInstance()
+            new_p.copy_from_player(p, self)
+            new_p.save()
+    
+    def copy_from_team_instance(self, team_instance, position):
+        self.base_team = team_instance.base_team
+        self.team_formation = team_instance.team_formation
+        self.money = team_instance.money
+        
+        self.serie = team_instance.serie
+        if position <= 2:
+            if team_instance.serie > 1:
+                self.serie = team_instance.serie - 1
+        elif position >= 7:
+            if team_instance.serie < 4:
+                self.serie = team_instance.serie + 1
+        
+        self.reset()
+        
+        for p in team_instance.players.all():
+            new_p = PlayerInstance()
+            new_p.copy_from_player_instance(p, self)
+            new_p.save()
     
     def __unicode__(self):
         return self.base_team.name
+
         
 class PlayerInstance(models.Model):
     team = models.ForeignKey(TeamInstance, null=True, blank=True, related_name='players')
@@ -97,15 +140,35 @@ class PlayerInstance(models.Model):
     luck = models.IntegerField(blank=True)
     health = models.IntegerField(blank=True)
     
+    def copy_from_player(self, player, team_instance):
+        self.team = team_instance
+        self.base_player = player
+        self.squad_member = player.squad_member
+        self.wage = player.wage
+        self.kick = player.kick
+        self.dribble = player.dribble
+        self.strength = player.strength
+        self.brave = player.brave
+        self.luck = player.luck
+        self.health = player.health
+        
+    def copy_from_player_instance(self, player_instance, team_instance):
+        self.copy_from_player(player_instance.base_player, team_instance)
+        self.squad_member = player_instance.squad_member
+        self.wage = player_instance.wage
+    
     def __unicode__(self):
         return self.base_player.name
-      
+
+    
 class Round(models.Model):
+    round_number = models.IntegerField(default=1)
     resolved = models.BooleanField(default=False) # was the round completed?
     
     def __unicode__(self):
         return 'DONE? ' + str(self.resolved)
-        
+
+      
 class Season(models.Model):
     current_round = models.ForeignKey(Round, null=True, blank=True, related_name='current_season')
     rounds = models.ManyToManyField(Round, null=True, blank=True, related_name='season')
@@ -117,6 +180,7 @@ class Season(models.Model):
     
     def __unicode__(self):
         return str(self.year) + ' | COMPLETED? ' + str(self.completed)
+
   
 class Match(models.Model):
     team_a = models.ForeignKey(TeamInstance, null=True, blank=True, related_name='match_team_a')
@@ -132,6 +196,7 @@ class Match(models.Model):
         else:
             return self.team_a.base_team.name + ' ? X ? ' + self.team_b.base_team.name
 
+
 class Manager(models.Model):
     current_season = models.ForeignKey(Season, null=True, blank=True, related_name='current_managed_by') # if current_season is null we have to create one before the user is able to play
     season = models.ManyToManyField(Season, null=True, blank=True, related_name='manager')
@@ -141,6 +206,7 @@ class Manager(models.Model):
     
     def __unicode__(self):
         return self.nickname
+
 
 class Result:
     def __init__(self,t1name="",t1goals=0,t1color1="",t1color2="",t1color3="",t2name="",t2goals=0,t2color1="",t2color2="",t2color3=""):
@@ -157,4 +223,3 @@ class Result:
     def __unicode__(self):
         string_result = self.t1name + " " + str(self.t1goals) + " x " + str(self.t2goals) + " " + self.t2name
         return string_result
- 
