@@ -29,10 +29,10 @@ TEAM_FORMATION = (
 )
 
 TEAM_SERIE = (
-    (0, u'Série A'),
-    (1, u'Série B'),
-    (2, u'Série C'),
-    (3, u'Série D'),
+    (1, u'Série A'),
+    (2, u'Série B'),
+    (3, u'Série C'),
+    (4, u'Série D'),
 )
 
 # blank is only used for validations on django's admin tool
@@ -42,9 +42,9 @@ class Team(models.Model):
     name = models.CharField(max_length=100)
     money = models.IntegerField(blank=True, default=0)
     team_formation = models.IntegerField(choices=TEAM_FORMATION)
-    color1 = models.CharField(max_length=20, default='white')
-    color2 = models.CharField(max_length=20, default='white')
-    color3 = models.CharField(max_length=20, default='white')
+    color1 = models.CharField(max_length=6)
+    color2 = models.CharField(max_length=6)
+    color3 = models.CharField(max_length=6)
     serie = models.IntegerField(choices=TEAM_SERIE)
     
     def __unicode__(self):
@@ -56,6 +56,7 @@ class Player(models.Model):
     position = models.IntegerField(choices=PLAYER_POSITION)
     name = models.CharField(max_length=100)
     nickname = models.CharField(max_length=100)
+    birthday = models.DateField()
     country = models.CharField(max_length=100, null=True, blank=True)
     birthday = models.DateField()
     wage = models.IntegerField(blank=True)
@@ -139,3 +140,20 @@ class Manager(models.Model):
     
     def __unicode__(self):
         return self.nickname
+
+class Result:
+    def __init__(self,t1name="",t1goals=0,t1color1="",t1color2="",t1color3="",t2name="",t2goals=0,t2color1="",t2color2="",t2color3=""):
+        self.t1name = t1name
+        self.t1goals = t1goals
+        self.t1color1 = t1color1
+        self.t1color2 = t1color2
+        self.t1color3 = t1color3
+        self.t2name = t2name
+        self.t2goals = t2goals
+        self.t2color1 = t2color1
+        self.t2color2 = t2color2
+        self.t2color3 = t2color3
+    def __unicode__(self):
+        string_result = self.t1name + " " + str(self.t1goals) + " x " + str(self.t2goals) + " " + self.t2name
+        return string_result
+ 
