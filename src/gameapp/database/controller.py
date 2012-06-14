@@ -23,15 +23,17 @@ def populate_db():
             
             team_serie = int(f[3].strip())
 
-            t = Team(name=team_name,\
-                      money=1000000,\
+            t, created = Team.objects.get_or_create(name=team_name,\
+                      defaults={money=1000000,\
                       country=f[2].strip(),\
                       team_formation=8,\
                       color1=f[4].strip(),\
                       color2=f[5].strip(),\
                       color3=f[6].strip(),\
-                      serie=team_serie)
-            t.save()
+                      serie=team_serie})
+                      
+            if not created:
+                team_serie=t.serie
         else:
             player_name = f[0].strip()
             
@@ -47,8 +49,8 @@ def populate_db():
             elif position_name == 'md': position = 2
             elif position_name == 'av': position = 3
 
-            p = Player(name=player_name,\
-                        nickname=player_name,\
+            p, created = Player.objects.get_or_create(name=player_name,\
+                        defaults={nickname=player_name,\
                         birthday=date(randint(1973,1996), randint(1,12), randint(1,28)),\
                         country=f[2].strip(),\
                         wage=randint(skill,skill+10)*10000,\
@@ -60,5 +62,4 @@ def populate_db():
                         luck=randint(0,50),\
                         health=randint(0,50),\
                         squad_member=True,\
-                        team=t)
-            p.save()
+                        team=t})
