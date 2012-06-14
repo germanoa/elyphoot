@@ -1,6 +1,6 @@
-from gameapp.models import Season, Team, TeamInstance
+from gameapp.models import Season, Team, TeamInstance, Match, Round
 from datetime import date
-from random import randint
+from random import randint, shuffle
 
 def get_random_team(season):
     teams = season.teams.filter(serie=4)
@@ -32,8 +32,52 @@ def copy_teams_from_base(season):
         ti.save()
         season.teams.add(ti) 
 
+def create_matches(teams):
+    matches = []
+    
+    for i in range(len(teams)):
+        for j in range(len(teams)):
+            if i == j: continue
+            
+            match = Match(team_a=teams[i],\
+                           team_b=teams[j],\
+                           resolved=False,\
+                           goals_a=0,\
+                           goals_b=0,\
+                           serie=teams[i].serie)
+            matches.append(match)
+    
+    shuffle(matches)
+    return matches         
+
 def create_rounds(season):
-    return
+    matches_serie_a = create_matches(season.teams.filter(serie=1))
+    matches_serie_b = create_matches(season.teams.filter(serie=2))
+    matches_serie_c = create_matches(season.teams.filter(serie=3))
+    matches_serie_d = create_matches(season.teams.filter(serie=4))
+    
+    round_count = 1
+    match_count = 0
+    round = None
+    for i in range(len(matches_serie_a)):
+        if match_count % 4 == 0:
+            if round is not None:
+                round.save()
+        
+            round = Round(round_number=round_count,\
+                           resolved=False)
+            round.save()
+            season.rounds.add(round)
+            round_count += 1
+        
+        round.matches.add(matches_serie_a[match_count])
+        round.matches.add(matches_serie_b[match_count])
+        round.matches.add(matches_serie_c[match_count])
+        round.matches.add(matches_serie_d[match_count])
+        
+        match_count += 1
+    
+    round.save()
 
 def create_season(manager):
     if manager is None:
@@ -56,10 +100,12 @@ def create_season(manager):
     
     season.save()
     
+    create_rounds(season)
+    
+    season.save()
+    
     manager.season.add(season)
     manager.current_season = season
     manager.save()
-    
-    
-                
+         
     return season

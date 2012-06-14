@@ -188,10 +188,11 @@ class Season(models.Model):
 class Match(models.Model):
     team_a = models.ForeignKey(TeamInstance, null=True, blank=True, related_name='match_team_a')
     team_b = models.ForeignKey(TeamInstance, null=True, blank=True, related_name='match_team_b')
-    round = models.ForeignKey(Round, null=False, blank=False)
+    round = models.ForeignKey(Round, null=True, blank=False, related_name='matches')
     goals_a = models.IntegerField(default=0)
     goals_b = models.IntegerField(default=0)
     resolved = models.BooleanField(default=False) # was the match played already?
+    serie = models.IntegerField(choices=TEAM_SERIE)
     
     def __unicode__(self):
         if self.resolved:
