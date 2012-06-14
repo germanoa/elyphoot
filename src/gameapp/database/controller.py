@@ -24,13 +24,13 @@ def populate_db():
             team_serie = int(f[3].strip())
 
             t, created = Team.objects.get_or_create(name=team_name,\
-                      defaults={money=1000000,\
-                      country=f[2].strip(),\
-                      team_formation=8,\
-                      color1=f[4].strip(),\
-                      color2=f[5].strip(),\
-                      color3=f[6].strip(),\
-                      serie=team_serie})
+                      defaults={'money': 1000000,\
+                      'country': f[2].strip(),\
+                      'team_formation': 8,\
+                      'color1': f[4].strip(),\
+                      'color2': f[5].strip(),\
+                      'color3': f[6].strip(),\
+                      'serie': team_serie})
                       
             if not created:
                 team_serie=t.serie
@@ -50,16 +50,16 @@ def populate_db():
             elif position_name == 'av': position = 3
 
             p, created = Player.objects.get_or_create(name=player_name,\
-                        defaults={nickname=player_name,\
-                        birthday=date(randint(1973,1996), randint(1,12), randint(1,28)),\
-                        country=f[2].strip(),\
-                        wage=randint(skill,skill+10)*10000,\
-                        position=position,\
-                        kick=randint(skill-5,skill+5),\
-                        dribble=randint(skill-5,skill+5),\
-                        strength=randint(skill-5,skill+5),\
-                        brave=randint(0,50),\
-                        luck=randint(0,50),\
-                        health=randint(0,50),\
-                        squad_member=True,\
-                        team=t})
+                        defaults={'nickname': player_name,\
+                        'birthday': date(randint(1973,1996), randint(1,12), randint(1,28)),\
+                        'country': f[2].strip(),\
+                        'wage': randint(skill,skill+10)*10000,\
+                        'position': position,\
+                        'kick': randint(skill-5,skill+5),\
+                        'dribble': randint(skill-5,skill+5),\
+                        'strength': randint(skill-5,skill+5),\
+                        'brave': randint(0,50),\
+                        'luck': randint(0,50),\
+                        'health': randint(0,50),\
+                        'squad_member': True,\
+                        'team': t})
