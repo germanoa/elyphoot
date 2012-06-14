@@ -40,6 +40,7 @@ TEAM_SERIE = (
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
+    country = models.CharField(max_length=100, null=True, blank=True)
     money = models.IntegerField(blank=True, default=0)
     team_formation = models.IntegerField(choices=TEAM_FORMATION)
     color1 = models.CharField(max_length=6)
