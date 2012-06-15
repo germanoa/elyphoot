@@ -32,14 +32,37 @@ def team_power(players, ball_position):
             power = power + k + d + s + b + l + h
     
     return power
-             
+
+def complete_match(match):
+    match.resolved = True
+        
+    match.team_a.goals_for += match.goals_a
+    match.team_a.goals_against += match.goals_b
+        
+    match.team_b.goals_for += match.goals_b
+    match.team_b.goals_against += match.goals_a
+        
+    if match.goals_a > match.goals_b:
+        match.team_a.wins += 1
+        match.team_a.points += 3    
+        match.team_b.loses += 1
+        
+    elif match.goals_b > match.goals_a:
+        match.team_b.wins += 1
+        match.team_b.points += 3
+        match.team_a.loses += 1
+        
+    else:
+        match.team_a.draws += 1
+        match.team_a.points += 1    
+        match.team_b.draws += 1
+        match.team_b.points += 1
+        
+    match.team_a.save()
+    match.team_b.save()
+            
 def run_match(match):
     if match.resolved:
-        return False
-    
-    if match.cronometer >= 90:
-        match.resolved = True
-        match.save()
         return False
     
     committal = randint(0,100)
@@ -65,5 +88,27 @@ def run_match(match):
         match.ball_position = 'MD'
     
     match.cronometer += 1
+    
+    if match.cronometer >= 90:
+        complete_match(match)
+    
     match.save()
     return True
+
+def run_round(round):
+    if round is None or round.resolved:
+        return False
+        
+    results = map(run_match, round.matches.all())
+    
+    for r in results:
+        if r:
+            return True # algum match ainda nao esta resolvido
+    
+    round.resolved = True
+    round.save()
+    
+    # informa 'season' que este round acabou para ir para o 
+    # proximo ou encerrar o campeonato
+    
+    return False # todos os matches resolvidos

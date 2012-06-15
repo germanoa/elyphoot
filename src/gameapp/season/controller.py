@@ -80,6 +80,9 @@ def create_rounds(season):
         match_count += 1
     
     round.save()
+    
+    season.current_round = season.rounds.get(round_number=1)
+    season.save()
 
 def create_season(manager):
     if manager is None:
