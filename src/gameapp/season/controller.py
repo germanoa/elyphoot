@@ -5,7 +5,7 @@ from random import randint, shuffle
 def get_random_team(season):
     teams = season.teams.filter(serie=4)
     
-    return teams[randint(0, len(teams))]
+    return teams[randint(0, len(teams) - 1)]
 
 def get_current_team(season, last_season):
     return season.teams.get(base_team=last_season.my_team.base_team)
@@ -44,7 +44,9 @@ def create_matches(teams):
                            resolved=False,\
                            goals_a=0,\
                            goals_b=0,\
-                           serie=teams[i].serie)
+                           serie=teams[i].serie,\
+                           cronometer=0,\
+                           ball_position='MD')
             matches.append(match)
     
     shuffle(matches)

@@ -193,12 +193,14 @@ class Match(models.Model):
     goals_b = models.IntegerField(default=0)
     resolved = models.BooleanField(default=False) # was the match played already?
     serie = models.IntegerField(choices=TEAM_SERIE)
+    cronometer = models.IntegerField(default=0)
+    ball_position = models.CharField(max_length=5, default='MD')
     
     def __unicode__(self):
         if self.resolved:
             return self.team_a.base_team.name + ' ' + str(self.goals_a) + ' X ' + str(self.goals_b) + ' ' + self.team_b.base_team.name
         else:
-            return self.team_a.base_team.name + ' ? X ? ' + self.team_b.base_team.name
+            return self.team_a.base_team.name + ' ? X ? ' + self.team_b.base_team.name + ' [' + self.ball_position + '] [' + str(self.cronometer) + ']'
 
 
 class Manager(models.Model):
