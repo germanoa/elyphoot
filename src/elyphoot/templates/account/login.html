@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block contents %}
+    <div id="login_form_content">
+        {% if error_message %}
+            <p class="error">{{ error_message }}</p>
+        {% endif %}
+  
+		<form action="" method="post">
+            {% csrf_token %}
+			<label for="username">User name:</label>
+			<input type="text" name="username" value="" id="username">
+			<label for="password">Password:</label>
+			<input type="password" name="password" value="" id="password">
+			
+			<input type="submit" value="login" />
+		</form>
+        
+        <p id="create_account"><a href='/game/create_account'>criar conta</a></p>
+    </div>
+{% endblock contents %}

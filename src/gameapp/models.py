@@ -126,6 +126,9 @@ class TeamInstance(models.Model):
             new_p = PlayerInstance()
             new_p.copy_from_player_instance(p, self)
             new_p.save()
+            
+    def get_goal_difference(self):
+        return self.goals_for - self.goals_against
     
     def __unicode__(self):
         return self.base_team.name

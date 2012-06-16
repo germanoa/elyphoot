@@ -17,7 +17,6 @@ def create_matches(teams):
     matrix.append([8,-7,-6,-5,-4,-3,-2,-1])
  
     for i in range(len(matrix)):
-        print "rodada " + str(i)
         for j in range(len(matrix)):
             i_t1 = matrix[j][0]
             i_t2 = matrix[j][i]
@@ -32,7 +31,6 @@ def create_matches(teams):
                            ball_position='MD')
             matches.append(match)
     
-    #shuffle(matches)
     return matches
 
 def complete_match(match):

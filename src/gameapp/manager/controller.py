@@ -16,8 +16,16 @@ def get_manager(request):
         return None
     
     try:
-        manager = Manager.objects.filter(uid=request.user.pk)
+        manager = Manager.objects.get(uid=request.user.pk)
     except Manager.DoesNotExist:
         manager = None
+    
+    return manager
+
+def get_or_create_manager(request):
+    manager = get_manager(request)
+    
+    if manager is None:
+        manager = create_manager(request.user.username, request.user.pk)
     
     return manager
