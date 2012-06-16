@@ -21,5 +21,5 @@ urlpatterns = patterns('',
     url(r'^loaddb$', 'gameapp.views.loaddb'),
 
     # Round
-    url(r'^round$', 'gameapp.views.runround'),
+    url(r'^round$', 'gameapp.round.controllers.runround'),
 )

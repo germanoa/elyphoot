@@ -5,12 +5,25 @@ from random import randint
 def create_matches(teams):
     matches = []
     
-    for i in range(len(teams)):
-        for j in range(len(teams)):
-            if i == j: continue
-            
-            match = Match(team_a=teams[i],\
-                           team_b=teams[j],\
+    matrix=[]
+    #hardcode matrix torneio problem para 8 times
+    matrix.append([1,2,3,4,5,6,7,8])
+    matrix.append([2,-1,4,3,6,5,8,7])
+    matrix.append([3,4,-1,-2,7,8,5,6])
+    matrix.append([4,-3,-2,-1,8,7,6,5])
+    matrix.append([5,6,7,8,-1,-2,-3,-4])
+    matrix.append([6,-5,8,7,-2,-1,-4,-3])
+    matrix.append([7,8,-5,-6,-3,-4,-1,-2])
+    matrix.append([8,-7,-6,-5,-4,-3,-2,-1])
+ 
+    for i in range(len(matrix)):
+        print "rodada " + str(i)
+        for j in range(len(matrix)):
+            i_t1 = matrix[j][0]
+            i_t2 = matrix[j][i]
+            if i_t1 == i_t2 or i_t1 < 0 or i_t2 < 0 : continue
+            match = Match(team_a=teams[i_t1-1],\
+                           team_b=teams[i_t2-1],\
                            resolved=False,\
                            goals_a=0,\
                            goals_b=0,\
@@ -19,7 +32,7 @@ def create_matches(teams):
                            ball_position='MD')
             matches.append(match)
     
-    shuffle(matches)
+    #shuffle(matches)
     return matches
 
 def complete_match(match):
