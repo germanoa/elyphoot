@@ -98,20 +98,20 @@ def play_round_step(request):
         
     season = manager.current_season
     if season is None:
-        return HttpResponse('[]')
+        return HttpResponse('{}')
     
     # if current season has no more rounds to be played or is completed, redirect to season view
     game_round = season.current_round
     if season.completed or game_round is None:
-        return HttpResponse('[]')
+        return HttpResponse('{}')
     
     if gameapp.round.controller.run_round(season, game_round):
         match_data = serializers.serialize('json', game_round.matches.all())
         cronometer = game_round.matches.all()[0].cronometer
         
-        return HttpResponse('[{"cronometer":' + str(cronometer) + ', "resolved":' + str(game_round.resolved).lower() + ', "matches":' + match_data + '}]')
+        return HttpResponse('{"cronometer":' + str(cronometer) + ', "resolved":' + str(game_round.resolved).lower() + ', "matches":' + match_data + '}')
     else:
-        return HttpResponse('[]')
+        return HttpResponse('{}')
 
 @login_required(login_url='/')
 def manage_team(request):

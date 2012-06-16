@@ -84,7 +84,7 @@ tr.team {
 	        {% for m in matches_serie_a %}
 	        <tr>
 		        <td  style="width:150px;border-color:{{m.team_a.base_team.color3}}" bgcolor={{m.team_a.base_team.color1}} align="right"><font color={{m.team_a.base_team.color2}}><b>{{m.team_a.base_team.name}}</b></font></td>
-		        <td style="border-style:none" id="{{m.pk}}"> {{ m.goals_a }} x {{ m.goals_b }}</td>
+		        <td style="border-style:none" id="{{m.pk}}">{{ m.goals_a }} x {{ m.goals_b }}</td>
 		        <td  style="width:150px;border-color:{{m.team_b.base_team.color3}}" bgcolor={{m.team_b.base_team.color1}} align="left"><font color={{m.team_b.base_team.color2}}><b>{{m.team_b.base_team.name}}</b></font></td>
 	        </tr>
 	        {% endfor %}
@@ -97,7 +97,7 @@ tr.team {
 	        {% for m in matches_serie_b %}
 	        <tr>
 	            <td  style="width:150px;border-color:{{m.team_a.base_team.color3}}" bgcolor={{m.team_a.base_team.color1}} align="right"><font color={{m.team_a.base_team.color2}}><b>{{m.team_a.base_team.name}}</b></font></td>
-	            <td style="border-style:none" id="{{m.pk}}"> {{ m.goals_a }} x {{ m.goals_b }}</td>
+	            <td style="border-style:none" id="{{m.pk}}">{{ m.goals_a }} x {{ m.goals_b }}</td>
 	            <td  style="width:150px;border-color:{{m.team_b.base_team.color3}}" bgcolor={{m.team_b.base_team.color1}} align="left"><font color={{m.team_b.base_team.color2}}><b>{{m.team_b.base_team.name}}</b></font></td>
 	        </tr>
 	        {% endfor %}
@@ -110,7 +110,7 @@ tr.team {
 	        {% for m in matches_serie_c %}
 	        <tr>
 	            <td  style="width:150px;border-color:{{m.team_a.base_team.color3}}" bgcolor={{m.team_a.base_team.color1}} align="right"><font color={{m.team_a.base_team.color2}}><b>{{m.team_a.base_team.name}}</b></font></td>
-	            <td style="border-style:none" id="{{m.pk}}"> {{ m.goals_a }} x {{ m.goals_b }}</td>
+	            <td style="border-style:none" id="{{m.pk}}">{{ m.goals_a }} x {{ m.goals_b }}</td>
 	            <td  style="width:150px;border-color:{{m.team_b.base_team.color3}}" bgcolor={{m.team_b.base_team.color1}} align="left"><font color={{m.team_b.base_team.color2}}><b>{{m.team_b.base_team.name}}</b></font></td>
 	        </tr>
 	        {% endfor %}
@@ -123,7 +123,7 @@ tr.team {
 	        {% for m in matches_serie_d %}
 	        <tr>
 	            <td  style="width:150px;border-color:{{m.team_a.base_team.color3}}" bgcolor={{m.team_a.base_team.color1}} align="right"><font color={{m.team_a.base_team.color2}}><b>{{m.team_a.base_team.name}}</b></font></td>
-	            <td style="border-style:none" id="{{m.pk}}"> {{ m.goals_a }} x {{ m.goals_b }}</td>
+	            <td style="border-style:none" id="{{m.pk}}">{{ m.goals_a }} x {{ m.goals_b }}</td>
 	            <td  style="width:150px;border-color:{{m.team_b.base_team.color3}}" bgcolor={{m.team_b.base_team.color1}} align="left"><font color={{m.team_b.base_team.color2}}><b>{{m.team_b.base_team.name}}</b></font></td>
 	        </tr>
 	        {% endfor %}
@@ -133,5 +133,59 @@ tr.team {
            <a href="/game/season">Voltar Para Temporada</a>
     </div>
 </div>
-{% if debug %} {{ relatorio }} {%endif %}
+<script type="text/javascript">
+<!--
+function isEmpty(obj) { 
+	for(var i in obj) { 
+		return false; 
+	} 
+	
+	return true; 
+}
+
+function setCronometer(time) {
+    var strTime = "";
+    if(time < 10) {
+        strTime += "0";
+    }
+    strTime += time;
+    strTime += ":00";
+    
+    $("#timer").text(strTime);
+}
+
+function setMatches(matches) {
+	// funcional call
+	jQuery.each(matches, function(i, value) {
+		var name = "#" + value.pk;
+		var score = value.fields.goals_a + " x " + value.fields.goals_b;
+		var currentScore = $(name).text()
+		
+		if(score != currentScore) {
+			$(name).effect("pulsate", {times: 5}, 1000);
+		}
+		
+		$(name).text(score);
+	});
+}
+
+function runRoundStep() {
+	$.getJSON("/game/play_round_step/", function(data) {
+		
+		if(isEmpty(data)) {
+			// End of match or error.
+			$("#season_footer").css("visibility", "visible");
+		} else {
+			setCronometer(data.cronometer);
+			setMatches(data.matches);
+			setTimeout(runRoundStep, 1000);		
+		}
+	});
+}
+
+$().ready(function() {
+	setTimeout(runRoundStep, 1000);
+});
+//-->
+</script>
 {% endblock contents %}

@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
-
 from django.contrib import admin
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -8,3 +8,4 @@ urlpatterns = patterns('',
     url(r'^game/', include('gameapp.urls')),
     url(r'^$', 'gameapp.views.index'),
 )
+
