@@ -1,4 +1,5 @@
 from random import randint
+import gameapp.match.controller
 
 def team_power(players, ball_position):
     power = 0
@@ -112,3 +113,36 @@ def run_round(round):
     # proximo ou encerrar o campeonato
     
     return False # todos os matches resolvidos
+    
+
+def create_rounds(season):
+    matches_serie_a = gameapp.match.controller.create_matches(season.teams.filter(serie=1))
+    matches_serie_b = gameapp.match.controller.create_matches(season.teams.filter(serie=2))
+    matches_serie_c = gameapp.match.controller.create_matches(season.teams.filter(serie=3))
+    matches_serie_d = gameapp.match.controller.create_matches(season.teams.filter(serie=4))
+    
+    round_count = 1
+    match_count = 0
+    round = None
+    for i in range(len(matches_serie_a)):
+        if match_count % 4 == 0:
+            if round is not None:
+                round.save()
+        
+            round = Round(round_number=round_count,\
+                           resolved=False)
+            round.save()
+            season.rounds.add(round)
+            round_count += 1
+        
+        round.matches.add(matches_serie_a[match_count])
+        round.matches.add(matches_serie_b[match_count])
+        round.matches.add(matches_serie_c[match_count])
+        round.matches.add(matches_serie_d[match_count])
+        
+        match_count += 1
+    
+    round.save()
+    
+    season.current_round = season.rounds.get(round_number=1)
+    season.save()
