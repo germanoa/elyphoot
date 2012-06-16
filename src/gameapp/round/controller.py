@@ -2,10 +2,10 @@ import gameapp.match.controller
 from gameapp.models import Round
 
 def run_round(game_round):
-    if round is None or round.resolved:
+    if game_round is None or game_round.resolved:
         return False
         
-    results = map(gameapp.match.controller.run_match, round.matches.all())
+    results = map(gameapp.match.controller.run_match, game_round.matches.all())
     
     for r in results:
         if r:
@@ -14,14 +14,14 @@ def run_round(game_round):
     game_round.resolved = True
     game_round.save()
     
-    if round.current_season is not None:
-        if round.round_number < 14:
+    if game_round.current_season is not None:
+        if game_round.round_number < 14:
             game_round.current_season.completed = True
             game_round.current_season.save()
             game_round.current_season = None
             game_round.save()
         else:
-            next_round = round.current_season.rounds.get(round_number=(game_round.round_number + 1))
+            next_round = game_round.current_season.rounds.get(round_number=(game_round.round_number + 1))
             next_round.current_season = game_round.current_season
             next_round.save()
     
