@@ -22,10 +22,10 @@ def copy_teams_from_season_aux(season, teams):
         position += 1
 
 def copy_teams_from_season(season, last_season):
-    copy_teams_from_season_aux(season, last_season.teams.filter(serie=1).order_by('points'))
-    copy_teams_from_season_aux(season, last_season.teams.filter(serie=2).order_by('points'))
-    copy_teams_from_season_aux(season, last_season.teams.filter(serie=3).order_by('points'))
-    copy_teams_from_season_aux(season, last_season.teams.filter(serie=4).order_by('points'))
+    copy_teams_from_season_aux(season, get_team_table(last_season, 1))
+    copy_teams_from_season_aux(season, get_team_table(last_season, 2))
+    copy_teams_from_season_aux(season, get_team_table(last_season, 3))
+    copy_teams_from_season_aux(season, get_team_table(last_season, 4))
 
 def copy_teams_from_base(season):
     for t in Team.objects.all():
