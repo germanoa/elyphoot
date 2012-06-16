@@ -1,4 +1,4 @@
-from gameapp.models import Season, Team, TeamInstance, Match, Round
+from gameapp.models import Season, Team, TeamInstance
 from datetime import date
 from random import randint
 
@@ -62,3 +62,10 @@ def create_season(manager):
     manager.save()
          
     return season
+
+def get_team_table(season, serie):
+    if season is None:
+        return None
+    
+    return season.teams.filter(serie=serie).order_by('-points')
+    

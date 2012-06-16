@@ -8,3 +8,16 @@ def create_manager(nickname, uid):
     manager.save()
     
     return manager
+
+def get_manager(request):
+    if request is None or\
+       request.user is None or\
+       not request.user.is_authenticated():
+        return None
+    
+    try:
+        manager = Manager.objects.filter(uid=request.user.pk)
+    except Manager.DoesNotExist:
+        manager = None
+    
+    return manager
