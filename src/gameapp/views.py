@@ -137,6 +137,12 @@ def play_round(request):
     matches_serie_c = gameapp.round.controller.get_matches_for_serie(game_round, 3)
     matches_serie_d = gameapp.round.controller.get_matches_for_serie(game_round, 4)
     
+    current_time = ""
+    t = matches_serie_a[0].cronometer
+    if t < 10:
+        current_time += "0"
+    current_time += str(t) + ":00"
+    
     return render_to_response('game/round.html', locals(), context_instance=RequestContext(request))
 
 @login_required(login_url='/')
