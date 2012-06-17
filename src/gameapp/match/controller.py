@@ -105,8 +105,26 @@ def team_power(players, ball_position):
             l = p.luck * randint(0,2)
             h = p.health * randint(0,2)
             power = power + k + d + s + b + l + h
-    
     return power
+
+def assign_goal(match,who):
+    if who == 1: team = match.team_a
+    else: team = match.team_b
+    position = randint(0,9)
+    if position <= 1: #gol da zaga
+        p = team.players.filter(squad_member=True, base_player__position=1)
+    elif position <= 4: #gol do meiocampo
+        p = team.players.filter(squad_member=True, base_player__position=2)
+    else: #gol dos atacantes
+        p = team.players.filter(squad_member=True, base_player__position=3)
+    assigned = randint(0,p.count()-1)
+    p[assigned].goals += 1
+    p[assigned].save()    
+
+    if who == 1: match.last_goal_assigned_a = p[assigned].base_player.name
+    else: match.last_goal_assigned_b = p[assigned].base_player.name
+
+    match.save()
             
 def run_match(match):
     if match.resolved:
@@ -114,24 +132,30 @@ def run_match(match):
     
     committal = randint(0,100)
     if match.ball_position == 'MD':
-        if committal > 70:
-            MD1_power = team_power(match.team_a.players.filter(squad_member=True, base_player__position=2), 'MD')
-            MD2_power = team_power(match.team_b.players.filter(squad_member=True, base_player__position=2), 'MD')  
+        if committal > 50:
+            players_md1 = match.team_a.players.filter(squad_member=True, base_player__position=2)
+            players_md2 = match.team_b.players.filter(squad_member=True, base_player__position=2)
+            MD1_power = team_power(players_md1, 'MD')
+            MD2_power = team_power(players_md2, 'MD')
             if MD1_power > MD2_power: match.ball_position = 'FW1'
             elif MD2_power > MD1_power: match.ball_position = 'FW2'
                 
     elif match.ball_position == 'FW1':
-        if committal > 90:
+        if committal > 50:
             FW1_power = team_power(match.team_a.players.filter(squad_member=True, base_player__position=3), 'FW')
             DF2_power = team_power(match.team_b.players.filter(squad_member=True, base_player__position=1), 'DF')    
-            if FW1_power > DF2_power: match.goals_a += 1
+            if FW1_power > DF2_power:
+                match.goals_a += 1
+                assign_goal(match,1)
         match.ball_position = 'MD'
 
     elif match.ball_position == 'FW2':
-        if committal > 90:
+        if committal > 60:
             FW2_power = team_power(match.team_b.players.filter(squad_member=True, base_player__position=3), 'FW')
             DF1_power = team_power(match.team_a.players.filter(squad_member=True, base_player__position=1), 'DF')            
-            if FW2_power > DF1_power: match.goals_b += 1
+            if FW2_power > DF1_power:
+                match.goals_b += 1
+                assign_goal(match,2)
         match.ball_position = 'MD'
     
     match.cronometer += 1

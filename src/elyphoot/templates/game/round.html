@@ -16,7 +16,7 @@ h1 {
     height: 520px;
     margin: auto;
     position: relative;
-    width: 770px;
+    width: 1500px;
     text-align:center;
 }
 
@@ -24,7 +24,7 @@ h1 {
     padding-top: 10px;
     height: 180px;
     position: absolute;
-    width: 370px;
+    width: 670px;
     border: thin dotted;
     border-color: #001100;
 }
@@ -35,7 +35,7 @@ h1 {
 
 #serie_b {
     top: 80px;
-    left: 400px;
+    left: 700px;
 }
 
 #serie_c {
@@ -43,7 +43,7 @@ h1 {
 }
 
 #serie_d {
-    left: 400px;
+    left: 700px;
     top: 280px;
 }
 
@@ -66,7 +66,7 @@ table {
 }
 
 table, th, td {
-    border: 1px solid grey; 
+    border: 0px solid grey; 
 }
 
 tr.team {
@@ -83,9 +83,11 @@ tr.team {
         <table>
 	        {% for m in matches_serie_a %}
 	        <tr>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goala{{m.pk}}" align="right">  {{m.last_goal_assigned_a}} </td>
 		        <td  style="width:150px;border-color:{{m.team_a.base_team.color3}}" bgcolor={{m.team_a.base_team.color1}} align="right"><font color={{m.team_a.base_team.color2}}><b>{{m.team_a.base_team.name}}{% ifequal m.team_a.pk my_team.pk %} ***{% endifequal %} </b></font></td>
 		        <td style="border-style:none" id="{{m.pk}}">{{ m.goals_a }} x {{ m.goals_b }}</td>
 		        <td  style="width:150px;border-color:{{m.team_b.base_team.color3}}" bgcolor={{m.team_b.base_team.color1}} align="left"><font color={{m.team_b.base_team.color2}}><b>{{m.team_b.base_team.name}}{% ifequal m.team_b.pk my_team.pk %} ***{% endifequal %}</b></font></td>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goalb{{m.pk}}" align="left">  {{m.last_goal_assigned_b}} </td>
 	        </tr>
 	        {% endfor %}
         </table>
@@ -96,9 +98,11 @@ tr.team {
         <table>
 	        {% for m in matches_serie_b %}
 	        <tr>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goala{{m.pk}}" align="right">  {{m.last_goal_assigned_a}} </td>
 	            <td  style="width:150px;border-color:{{m.team_a.base_team.color3}}" bgcolor={{m.team_a.base_team.color1}} align="right"><font color={{m.team_a.base_team.color2}}><b>{{m.team_a.base_team.name}}{% ifequal m.team_a.pk my_team.pk %} ***{% endifequal %}</b></font></td>
 	            <td style="border-style:none" id="{{m.pk}}">{{ m.goals_a }} x {{ m.goals_b }}</td>
 	            <td  style="width:150px;border-color:{{m.team_b.base_team.color3}}" bgcolor={{m.team_b.base_team.color1}} align="left"><font color={{m.team_b.base_team.color2}}><b>{{m.team_b.base_team.name}}{% ifequal m.team_b.pk my_team.pk %} ***{% endifequal %}</b></font></td>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goalb{{m.pk}}" align="left">  {{m.last_goal_assigned_b}} </td>
 	        </tr>
 	        {% endfor %}
         </table>
@@ -109,9 +113,11 @@ tr.team {
         <table>
 	        {% for m in matches_serie_c %}
 	        <tr>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goala{{m.pk}}" align="right">  {{m.last_goal_assigned_a}} </td>
 	            <td  style="width:150px;border-color:{{m.team_a.base_team.color3}}" bgcolor={{m.team_a.base_team.color1}} align="right"><font color={{m.team_a.base_team.color2}}><b>{{m.team_a.base_team.name}}{% ifequal m.team_a.pk my_team.pk %} ***{% endifequal %}</b></font></td>
 	            <td style="border-style:none" id="{{m.pk}}">{{ m.goals_a }} x {{ m.goals_b }}</td>
 	            <td  style="width:150px;border-color:{{m.team_b.base_team.color3}}" bgcolor={{m.team_b.base_team.color1}} align="left"><font color={{m.team_b.base_team.color2}}><b>{{m.team_b.base_team.name}}{% ifequal m.team_b.pk my_team.pk %} ***{% endifequal %}</b></font></td>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goalb{{m.pk}}" align="left">  {{m.last_goal_assigned_b}} </td>
 	        </tr>
 	        {% endfor %}
         </table>
@@ -122,9 +128,11 @@ tr.team {
         <table>
 	        {% for m in matches_serie_d %}
 	        <tr>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goala{{m.pk}}" align="right">  {{m.last_goal_assigned_a}} </td>
 	            <td  style="width:150px;border-color:{{m.team_a.base_team.color3}}" bgcolor={{m.team_a.base_team.color1}} align="right"><font color={{m.team_a.base_team.color2}}><b>{{m.team_a.base_team.name}}{% ifequal m.team_a.pk my_team.pk %} ***{% endifequal %}</b></font></td>
 	            <td style="border-style:none" id="{{m.pk}}">{{ m.goals_a }} x {{ m.goals_b }}</td>
 	            <td  style="width:150px;border-color:{{m.team_b.base_team.color3}}" bgcolor={{m.team_b.base_team.color1}} align="left"><font color={{m.team_b.base_team.color2}}><b>{{m.team_b.base_team.name}}{% ifequal m.team_b.pk my_team.pk %} ***{% endifequal %}</b></font></td>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goalb{{m.pk}}" align="left">  {{m.last_goal_assigned_b}} </td>
 	        </tr>
 	        {% endfor %}
         </table>
@@ -154,18 +162,36 @@ function setCronometer(time) {
     $("#timer").text(strTime);
 }
 
-function setMatches(matches) {
+function setMatches(matches,time) {
 	// funcional call
 	jQuery.each(matches, function(i, value) {
+
 		var name = "#" + value.pk;
 		var score = value.fields.goals_a + " x " + value.fields.goals_b;
+		var name_goal_a = "#goala" + value.pk;
+		var goal_a = value.fields.last_goal_assigned_a;
+		var name_goal_b = "#goalb" + value.pk;
+		var goal_b = value.fields.last_goal_assigned_b;
+		var currentGoal_a = $(name_goal_a).text()
+		var currentGoal_b = $(name_goal_b).text()
 		var currentScore = $(name).text()
 		
 		if(score != currentScore) {
 			$(name).effect("pulsate", {times: 5}, 1000);
 		}
-		
 		$(name).text(score);
+
+		if(goal_a != currentGoal_a && goal_a != "nobody") {
+    		$(name_goal_a).text(goal_a);
+            $(name_goal_a).css("color","white");
+			$(name_goal_a).effect("pulsate", {times: 5}, 1000);
+		}
+		if(goal_b != currentGoal_b && goal_b != "nobody") {
+    		$(name_goal_b).text(goal_b);
+            $(name_goal_b).css("color","white");
+			$(name_goal_b).effect("pulsate", {times: 5}, 1000);
+		}
+
 	});
 }
 
@@ -177,7 +203,7 @@ function runRoundStep() {
 			$("#season_footer").css("visibility", "visible");
 		} else {
 			setCronometer(data.cronometer);
-			setMatches(data.matches);
+			setMatches(data.matches,data.cronometer);
 			setTimeout(runRoundStep, 1000);		
 		}
 	});

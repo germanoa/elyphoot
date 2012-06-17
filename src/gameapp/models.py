@@ -145,6 +145,7 @@ class PlayerInstance(models.Model):
     brave = models.IntegerField(blank=True)
     luck = models.IntegerField(blank=True)
     health = models.IntegerField(blank=True)
+    goals = models.IntegerField(blank=True, default=0)
     
     def copy_from_player(self, player, team_instance):
         self.team = team_instance
@@ -198,6 +199,8 @@ class Match(models.Model):
     serie = models.IntegerField(choices=TEAM_SERIE)
     cronometer = models.IntegerField(default=0)
     ball_position = models.CharField(max_length=5, default='MD')
+    last_goal_assigned_a = models.CharField(max_length=100, default='nobody')
+    last_goal_assigned_b = models.CharField(max_length=100, default='nobody')
     
     def __unicode__(self):
         if self.resolved:
