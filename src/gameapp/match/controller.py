@@ -49,6 +49,9 @@ def create_matches(teams):
 
 def complete_match(match):
     match.resolved = True
+
+    match.team_a.committal = 30
+    match.team_b.committal = 30
         
     match.team_a.goals_for += match.goals_a
     match.team_a.goals_against += match.goals_b
@@ -132,7 +135,7 @@ def run_match(match):
     
     committal = randint(0,100)
     if match.ball_position == 'MD':
-        if committal > 50:
+        if committal > 30:
             players_md1 = match.team_a.players.filter(squad_member=True, base_player__position=2)
             players_md2 = match.team_b.players.filter(squad_member=True, base_player__position=2)
             MD1_power = team_power(players_md1, 'MD')
@@ -141,19 +144,21 @@ def run_match(match):
             elif MD2_power > MD1_power: match.ball_position = 'FW2'
                 
     elif match.ball_position == 'FW1':
-        if committal > 50:
+        if committal > match.team_a.committal:
             FW1_power = team_power(match.team_a.players.filter(squad_member=True, base_player__position=3), 'FW')
             DF2_power = team_power(match.team_b.players.filter(squad_member=True, base_player__position=1), 'DF')    
             if FW1_power > DF2_power:
+                match.team_a.committal += 10
                 match.goals_a += 1
                 assign_goal(match,1)
         match.ball_position = 'MD'
 
     elif match.ball_position == 'FW2':
-        if committal > 60:
+        if committal > match.team_b.committal + 10: # +10 pressao visitante
             FW2_power = team_power(match.team_b.players.filter(squad_member=True, base_player__position=3), 'FW')
             DF1_power = team_power(match.team_a.players.filter(squad_member=True, base_player__position=1), 'DF')            
             if FW2_power > DF1_power:
+                match.team_b.committal += 10
                 match.goals_b += 1
                 assign_goal(match,2)
         match.ball_position = 'MD'

@@ -84,6 +84,7 @@ class TeamInstance(models.Model):
     points = models.IntegerField(default=0)
     money = models.IntegerField(blank=True, default=0)
     serie = models.IntegerField(choices=TEAM_SERIE)
+    committal = models.IntegerField(default=30)
     
     def reset(self):
         self.wins = 0
