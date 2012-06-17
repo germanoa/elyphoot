@@ -15,7 +15,9 @@ def create_matches(teams):
     matrix.append([6,-5,8,7,-2,-1,-4,-3])
     matrix.append([7,8,-5,-6,-3,-4,-1,-2])
     matrix.append([8,-7,-6,-5,-4,-3,-2,-1])
- 
+
+    turno = []
+    returno = []
     for i in range(len(matrix)):
         for j in range(len(matrix)):
             i_t1 = matrix[j][0]
@@ -29,9 +31,21 @@ def create_matches(teams):
                            serie=teams[i].serie,\
                            cronometer=0,\
                            ball_position='MD')
-            matches.append(match)
+            turno.append(match)
+            
+            match = Match(team_b=teams[i_t1-1],\
+                           team_a=teams[i_t2-1],\
+                           resolved=False,\
+                           goals_a=0,\
+                           goals_b=0,\
+                           serie=teams[i].serie,\
+                           cronometer=0,\
+                           ball_position='MD')
+            returno.append(match)
     
-    return matches
+    # concats "turno" and "returno"
+    turno.extend(returno)
+    return turno
 
 def complete_match(match):
     match.resolved = True

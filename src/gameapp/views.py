@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.core import serializers
@@ -5,10 +7,14 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
+from django.contrib.auth.models import User
 
 import gameapp.manager.controller
 import gameapp.season.controller
 import gameapp.round.controller
+
+def is_null_or_empty(value):
+    return value is None or len(value) <= 0
 
 def index(request):
     # check if the user is already logged in.
@@ -19,25 +25,67 @@ def index(request):
         if request.method == 'POST':
             username = request.POST.get('username', '')
             password = request.POST.get('password', '')
-        
-            user = auth.authenticate(username=username, password=password)
-            if user is not None and user.is_authenticated():
-                auth.login(request, user)
-                
-                # redirect to season view
-                return redirect(reverse('game_season'), context_instance=RequestContext(request))
+            
+            if is_null_or_empty(username) or is_null_or_empty(password):
+                error_message = 'Nome de usuário ou senha inválidos!'
             else:
-                error_message = 'Nome de usu&aacute;rio ou senha inv&aacute;lidos!'
+                user = auth.authenticate(username=username, password=password)
+                if user is not None and user.is_authenticated():
+                    auth.login(request, user)
+                    
+                    # redirect to season view
+                    return redirect(reverse('game_season'), context_instance=RequestContext(request))
+                else:
+                    error_message = 'Nome de usuário ou senha inválidos!'
                 
         return render_to_response('account/login.html',  locals() , context_instance=RequestContext(request))
     else:
         # redirect to season view
         return redirect(reverse('game_season'), context_instance=RequestContext(request))
 
+def logout(request):
+    auth.logout(request)
+    
+    return redirect(reverse('index'), context_instance=RequestContext(request))
+
 def create_account(request):
     # test if data was received and create an account.
     # otherwise show the registration form.
-    return HttpResponse('create account')
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        retyped_password = request.POST.get('repeat_password', '')
+        manager_name = request.POST.get('manager_name', '')
+        email = request.POST.get('email', '')
+        
+        if is_null_or_empty(username):
+            error_message = "Nome de usuário inválido!"
+        elif is_null_or_empty(email):
+            error_message = "Email inválido!"
+        elif is_null_or_empty(manager_name):
+            error_message = "Nome do manager inválido!"
+        elif is_null_or_empty(password) or is_null_or_empty(retyped_password):
+            error_message = "Senha inválida!"
+        elif password != retyped_password:
+            error_message = "As senhas digitadas não conferem!"
+        else:
+            try:
+                user = User.objects.create_user(username, email, password)
+                manager = gameapp.manager.controller.create_manager(manager_name, user.pk)
+                
+                user = auth.authenticate(username=username, password=password)
+                if user is not None and user.is_authenticated():
+                    auth.login(request, user)
+                    
+                    # redirect to season view
+                    return redirect(reverse('game_season'), context_instance=RequestContext(request))
+                else:
+                    error_message = 'Nome de usuário ou senha inválidos!'
+                    
+            except ValueError:
+                error_message = "Nome de usuário inválido!!"
+            
+    return render_to_response('account/create_account.html', locals(), context_instance=RequestContext(request))
 
 @login_required(login_url='/')
 def create_season(request):
@@ -66,6 +114,7 @@ def season(request):
     teams_serie_b = gameapp.season.controller.get_team_table(season, 2)
     teams_serie_c = gameapp.season.controller.get_team_table(season, 3)
     teams_serie_d = gameapp.season.controller.get_team_table(season, 4)
+    my_team = season.my_team
     
     return render_to_response('game/season.html',  locals() , context_instance=RequestContext(request))
 
@@ -82,6 +131,7 @@ def play_round(request):
     if season.completed or game_round is None:
         return redirect(reverse('game_season'), context_instance=RequestContext(request))
     
+    my_team = season.my_team
     matches_serie_a = gameapp.round.controller.get_matches_for_serie(game_round, 1)
     matches_serie_b = gameapp.round.controller.get_matches_for_serie(game_round, 2)
     matches_serie_c = gameapp.round.controller.get_matches_for_serie(game_round, 3)

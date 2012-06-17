@@ -1,19 +1,52 @@
 {% extends "base.html" %}
 
+{% block head %}
+{{ block.super }}
+<style>
+<!--
+
+#login_form_content {
+    top: 150px;
+    margin: 0 auto;
+    position: relative;
+    width: 300px;
+}
+
+#username, #password {
+    position: absolute;
+    right: 10px;
+}
+
+#login_button {
+    float: right;
+    margin-right: 10px;
+}
+
+.error {
+    background-color: #c00;
+    color: white;
+    width: 96%;
+    text-align: left;
+}
+-->
+</style>
+{% endblock head %}
+
 {% block contents %}
     <div id="login_form_content">
+        <h1 style="text-align: center; width: 100%;">ELYPHOOT</h1>
         {% if error_message %}
-            <p class="error">{{ error_message }}</p>
+            <div class="error">{{ error_message }}</div><br />
         {% endif %}
   
 		<form action="" method="post">
             {% csrf_token %}
-			<label for="username">User name:</label>
-			<input type="text" name="username" value="" id="username">
-			<label for="password">Password:</label>
+			<label for="username">Nome de usu&aacute;rio:</label>
+			<input type="text" name="username" value="{{ username|escape }}" id="username"><br/><br/>
+			<label for="password">Senha:</label>
 			<input type="password" name="password" value="" id="password">
-			
-			<input type="submit" value="login" />
+			<br /><br />
+			<div id="login_button"><input type="submit" value="login" /></div>
 		</form>
         
         <p id="create_account"><a href='/game/create_account'>criar conta</a></p>

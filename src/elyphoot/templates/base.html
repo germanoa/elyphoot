@@ -9,6 +9,7 @@ body {
   font-family: arial;
   background-color: green;
   color: white;
+  position: relative;
 }
 
 h1 {
@@ -31,12 +32,21 @@ h2 {
 .contents {
   padding: 10px;
 }
+
+#logout {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
 </style>
 {% endblock %}
 </head>
 
 <body>
-
+{% if user.is_authenticated %}
+    <div id="logout"><a href="/logout">logout</a></div>
+{% endif %}
 {% block contents %}{% endblock %}
 
 </body>

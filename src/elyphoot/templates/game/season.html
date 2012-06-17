@@ -84,7 +84,7 @@ tr.team {
 		
 		{% for t in teams_serie_a %}
 		<tr class="team" style="border-color:#{{t.base_team.color3}}; background-color:#{{t.base_team.color1}}; text-align: left;">
-		    <td style="color:#{{t.base_team.color2}}; font-weight: bold;">{{t.base_team.name}}</td>
+		    <td style="color:#{{t.base_team.color2}}; font-weight: bold;">{{t.base_team.name}}{% ifequal t.pk my_team.pk %} ***{% endifequal %}</td>
 		    <td align="center"><font color={{t.base_team.color2}}>{{t.points}}</font></td>
 		    <td align="center"><font color={{t.base_team.color2}}>{{t.wins}}</font></td>
 		    <td align="center"><font color={{t.base_team.color2}}>{{t.draws}}</font></td>
@@ -113,7 +113,7 @@ tr.team {
 	    
 	    {% for t in teams_serie_b %}
 	    <tr class="team" style="border-color:#{{t.base_team.color3}}; background-color:#{{t.base_team.color1}}; text-align: left;">
-	        <td style="color:#{{t.base_team.color2}}; font-weight: bold;">{{t.base_team.name}}</td>
+	        <td style="color:#{{t.base_team.color2}}; font-weight: bold;">{{t.base_team.name}}{% ifequal t.pk my_team.pk %} ***{% endifequal %}</td>
 	        <td align="center"><font color={{t.base_team.color2}}>{{t.points}}</font></td>
 	        <td align="center"><font color={{t.base_team.color2}}>{{t.wins}}</font></td>
 	        <td align="center"><font color={{t.base_team.color2}}>{{t.draws}}</font></td>
@@ -142,7 +142,7 @@ tr.team {
 	    
 	    {% for t in teams_serie_c %}
 	    <tr class="team" style="border-color:#{{t.base_team.color3}}; background-color:#{{t.base_team.color1}}; text-align: left;">
-	        <td style="color:#{{t.base_team.color2}}; font-weight: bold;">{{t.base_team.name}}</td>
+	        <td style="color:#{{t.base_team.color2}}; font-weight: bold;">{{t.base_team.name}}{% ifequal t.pk my_team.pk %} ***{% endifequal %}</td>
 	        <td align="center"><font color={{t.base_team.color2}}>{{t.points}}</font></td>
 	        <td align="center"><font color={{t.base_team.color2}}>{{t.wins}}</font></td>
 	        <td align="center"><font color={{t.base_team.color2}}>{{t.draws}}</font></td>
@@ -171,7 +171,7 @@ tr.team {
 	    
 	    {% for t in teams_serie_d %}
 	    <tr class="team" style="border-color:#{{t.base_team.color3}}; background-color:#{{t.base_team.color1}}; text-align: left;">
-	        <td style="color:#{{t.base_team.color2}}; font-weight: bold;">{{t.base_team.name}}</td>
+	        <td style="color:#{{t.base_team.color2}}; font-weight: bold;">{{t.base_team.name}}{% ifequal t.pk my_team.pk %} ***{% endifequal %}</td>
 	        <td align="center"><font color={{t.base_team.color2}}>{{t.points}}</font></td>
 	        <td align="center"><font color={{t.base_team.color2}}>{{t.wins}}</font></td>
 	        <td align="center"><font color={{t.base_team.color2}}>{{t.draws}}</font></td>
