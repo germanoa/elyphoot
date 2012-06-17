@@ -151,6 +151,7 @@ def run_match(match):
                 match.team_a.committal += 10
                 match.goals_a += 1
                 assign_goal(match,1)
+                match.team_a.save()
         match.ball_position = 'MD'
 
     elif match.ball_position == 'FW2':
@@ -161,6 +162,7 @@ def run_match(match):
                 match.team_b.committal += 10
                 match.goals_b += 1
                 assign_goal(match,2)
+                match.team_b.save()
         match.ball_position = 'MD'
     
     match.cronometer += 1
