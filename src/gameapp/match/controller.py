@@ -132,8 +132,6 @@ def assign_goal(match,who):
 def run_match(match):
     if match.resolved:
         return False
-    if match.serie == 2:
-        print match
         
     committal = randint(0,100)
     if match.ball_position == 'MD':
