@@ -16,7 +16,7 @@ h1 {
     height: 520px;
     margin: auto;
     position: relative;
-    width: 1500px;
+    width: 1370px;
     text-align:center;
 }
 
@@ -83,11 +83,11 @@ tr.team {
         <table>
 	        {% for m in matches_serie_a %}
 	        <tr>
-                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goala{{m.pk}}" align="right">  {{m.last_goal_assigned_a}} </td>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:{% ifequal m.last_goal_assigned_a "nobody" %}green{% else %}white{% endifequal %}" id="goala{{m.pk}}" align="right">{{m.last_goal_assigned_a}}</td>
 		        <td  style="width:150px;border-color:{{m.team_a.base_team.color3}}" bgcolor={{m.team_a.base_team.color1}} align="right"><font color={{m.team_a.base_team.color2}}><b>{{m.team_a.base_team.name}}{% ifequal m.team_a.pk my_team.pk %} ***{% endifequal %} </b></font></td>
 		        <td style="border-style:none" id="{{m.pk}}">{{ m.goals_a }} x {{ m.goals_b }}</td>
 		        <td  style="width:150px;border-color:{{m.team_b.base_team.color3}}" bgcolor={{m.team_b.base_team.color1}} align="left"><font color={{m.team_b.base_team.color2}}><b>{{m.team_b.base_team.name}}{% ifequal m.team_b.pk my_team.pk %} ***{% endifequal %}</b></font></td>
-                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goalb{{m.pk}}" align="left">  {{m.last_goal_assigned_b}} </td>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:{% ifequal m.last_goal_assigned_b "nobody" %}green{% else %}white{% endifequal %}" id="goalb{{m.pk}}" align="left">{{m.last_goal_assigned_b}}</td>
 	        </tr>
 	        {% endfor %}
         </table>
@@ -98,11 +98,11 @@ tr.team {
         <table>
 	        {% for m in matches_serie_b %}
 	        <tr>
-                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goala{{m.pk}}" align="right">  {{m.last_goal_assigned_a}} </td>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:{% ifequal m.last_goal_assigned_a "nobody" %}green{% else %}white{% endifequal %}" id="goala{{m.pk}}" align="right">{{m.last_goal_assigned_a}}</td>
 	            <td  style="width:150px;border-color:{{m.team_a.base_team.color3}}" bgcolor={{m.team_a.base_team.color1}} align="right"><font color={{m.team_a.base_team.color2}}><b>{{m.team_a.base_team.name}}{% ifequal m.team_a.pk my_team.pk %} ***{% endifequal %}</b></font></td>
 	            <td style="border-style:none" id="{{m.pk}}">{{ m.goals_a }} x {{ m.goals_b }}</td>
 	            <td  style="width:150px;border-color:{{m.team_b.base_team.color3}}" bgcolor={{m.team_b.base_team.color1}} align="left"><font color={{m.team_b.base_team.color2}}><b>{{m.team_b.base_team.name}}{% ifequal m.team_b.pk my_team.pk %} ***{% endifequal %}</b></font></td>
-                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goalb{{m.pk}}" align="left">  {{m.last_goal_assigned_b}} </td>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:{% ifequal m.last_goal_assigned_b "nobody" %}green{% else %}white{% endifequal %}" id="goalb{{m.pk}}" align="left">{{m.last_goal_assigned_b}}</td>
 	        </tr>
 	        {% endfor %}
         </table>
@@ -113,11 +113,11 @@ tr.team {
         <table>
 	        {% for m in matches_serie_c %}
 	        <tr>
-                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goala{{m.pk}}" align="right">  {{m.last_goal_assigned_a}} </td>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:{% ifequal m.last_goal_assigned_a "nobody" %}green{% else %}white{% endifequal %}" id="goala{{m.pk}}" align="right">{{m.last_goal_assigned_a}}</td>
 	            <td  style="width:150px;border-color:{{m.team_a.base_team.color3}}" bgcolor={{m.team_a.base_team.color1}} align="right"><font color={{m.team_a.base_team.color2}}><b>{{m.team_a.base_team.name}}{% ifequal m.team_a.pk my_team.pk %} ***{% endifequal %}</b></font></td>
 	            <td style="border-style:none" id="{{m.pk}}">{{ m.goals_a }} x {{ m.goals_b }}</td>
 	            <td  style="width:150px;border-color:{{m.team_b.base_team.color3}}" bgcolor={{m.team_b.base_team.color1}} align="left"><font color={{m.team_b.base_team.color2}}><b>{{m.team_b.base_team.name}}{% ifequal m.team_b.pk my_team.pk %} ***{% endifequal %}</b></font></td>
-                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goalb{{m.pk}}" align="left">  {{m.last_goal_assigned_b}} </td>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:{% ifequal m.last_goal_assigned_b "nobody" %}green{% else %}white{% endifequal %}" id="goalb{{m.pk}}" align="left">{{m.last_goal_assigned_b}}</td>
 	        </tr>
 	        {% endfor %}
         </table>
@@ -128,11 +128,11 @@ tr.team {
         <table>
 	        {% for m in matches_serie_d %}
 	        <tr>
-                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goala{{m.pk}}" align="right">  {{m.last_goal_assigned_a}} </td>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:{% ifequal m.last_goal_assigned_a "nobody" %}green{% else %}white{% endifequal %}" id="goala{{m.pk}}" align="right">{{m.last_goal_assigned_a}}</td>
 	            <td  style="width:150px;border-color:{{m.team_a.base_team.color3}}" bgcolor={{m.team_a.base_team.color1}} align="right"><font color={{m.team_a.base_team.color2}}><b>{{m.team_a.base_team.name}}{% ifequal m.team_a.pk my_team.pk %} ***{% endifequal %}</b></font></td>
 	            <td style="border-style:none" id="{{m.pk}}">{{ m.goals_a }} x {{ m.goals_b }}</td>
 	            <td  style="width:150px;border-color:{{m.team_b.base_team.color3}}" bgcolor={{m.team_b.base_team.color1}} align="left"><font color={{m.team_b.base_team.color2}}><b>{{m.team_b.base_team.name}}{% ifequal m.team_b.pk my_team.pk %} ***{% endifequal %}</b></font></td>
-                <td style ="width:150px;border-style:none;font-size:8pt;color:green" id="goalb{{m.pk}}" align="left">  {{m.last_goal_assigned_b}} </td>
+                <td style ="width:150px;border-style:none;font-size:8pt;color:{% ifequal m.last_goal_assigned_b "nobody" %}green{% else %}white{% endifequal %}" id="goalb{{m.pk}}" align="left">{{m.last_goal_assigned_b}}</td>
 	        </tr>
 	        {% endfor %}
         </table>
